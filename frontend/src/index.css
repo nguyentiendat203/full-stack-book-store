@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Đặt màu nền khi submenu được nhấn vào */
+
+
+.ant-menu-light .ant-menu-submenu-selected>.ant-menu-submenu-title,
+:where(.css-dev-only-do-not-override-1uq9j6g).ant-menu-light>.ant-menu .ant-menu-submenu-selected>.ant-menu-submenu-title {
+  color              : red;
+  /* background-color: red; */
+  /* Màu nền khi được chọn */
+}
+
+.ant-menu-light .ant-menu-item-selected,
+:where(.css-dev-only-do-not-override-1uq9j6g).ant-menu-light>.ant-menu .ant-menu-item-selected {
+  color: red;
+}
+
+.ant-input:focus {
+  border-color      : transparent;
+  outline           : 0;
+  -webkit-box-shadow: 0 0 0 2px rgba(87, 168, 233, .2);
+  box-shadow        : 0 0 0 2px rgba(87, 168, 233, .2);
+}
+
+.ant-input:hover {
+  border-color: rgba(87, 168, 233, .2);
+}
+
+.ant-radio-checked .ant-radio-inner {
+  border-color    : red !important;
+  background-color: red !important;
+}
+
+.ant-tabs-nav-list {
+  flex           : 1;
+  justify-content: space-around;
+}
+
+.ant-tabs-nav {
+  background-color: white;
+  border-radius   : 8px;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active span {
+  color: #d22826;
+}
+
+.ant-menu-item.ant-menu-item-selected span {
+  color: #d22826;
+}
