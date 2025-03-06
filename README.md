@@ -16,34 +16,49 @@ Create a website that helps users easily search and buy their favorite books. Ge
 💻 <b>Back-end technologies:</b> Javascript, Node.js RESTful APIs, Express Framework. Working with database MySQL, Sequelize Node.js ORM.
 
 ## Installation
-### Use the package manager [npm](https://docs.npmjs.com/) to install.
+### Use node.js version 18.20.4 and the package manager [yarn](https://classic.yarnpkg.com/en/packages) to install.
 👉 In the backend folder:
   - Create a <b>.env</b> file like the environment variables in the <b>.env.example</b> file
   - Create a mysql database named "books_store" then change the configuration in the <b>config.json</b> file.
   - After completing the above steps, run this command:
 ```bash
-npm install
+yarn install
 ```
   And then run this command:
 ```bash
-py manage.py runserver 8080
+yarn dev
 ```
 
 👉 In the frontend directory run this command:
-- <b>Use Node.js version 20.11.1<b/>
 ```bash
-npm install
+yarn install
 ```
   And then run this command:
 ```bash
-npm run dev
+yarn dev
 ```
 
 ## Demo
-![Screenshot 2025-03-06 112808](https://github.com/user-attachments/assets/e5d0b8ce-e48b-49b3-8215-7c22f6916b3d)
+Admin account:
+  - email: dat@gmail.com
+  - password: pass1234
 
-![Screenshot 2025-03-06 113050](https://github.com/user-attachments/assets/84598856-4d0e-4db6-8e6c-be26d5f9c358)
+![Screenshot 2025-03-06 212021](https://github.com/user-attachments/assets/aed417bf-f4e3-4cd3-a554-179eb97a2b41)
 
-![Screenshot 2025-03-06 113104](https://github.com/user-attachments/assets/d52c9031-4d47-4a76-ad28-6c6be1fe2583)
+![Screenshot 2025-03-06 212033](https://github.com/user-attachments/assets/bb13a0e6-91c2-402d-814e-d99d11cd64c8)
 
-![Screenshot 2025-03-06 113233](https://github.com/user-attachments/assets/18f4fd7d-4cf8-439c-9386-4734617c8076)
+![Screenshot 2025-03-06 212351](https://github.com/user-attachments/assets/5a748678-d9ce-4a33-b5b3-3090b748dce9)
+
+![Screenshot 2025-03-06 212426](https://github.com/user-attachments/assets/58e9c36d-dc12-40e7-8d89-7fd4da92a02b)
+
+![Screenshot 2025-03-06 212509](https://github.com/user-attachments/assets/029ec808-8049-4edf-b2c8-b210fbb3cb56)
+
+![Screenshot 2025-03-06 212519](https://github.com/user-attachments/assets/b74cc4e3-8443-4c27-9ab5-09dfa0d94cc8)
+
+![Screenshot 2025-03-06 212530](https://github.com/user-attachments/assets/266e600c-36d4-4f9c-add6-39605f45f4d4)
+
+![Screenshot 2025-03-06 212539](https://github.com/user-attachments/assets/aef25a77-77d1-4910-b1cc-51bae47dd68f)
+
+![Screenshot 2025-03-06 212550](https://github.com/user-attachments/assets/a7b25c91-b48b-4636-9067-d57dec9d2d55)
+
+
