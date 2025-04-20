@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "",
+    "password": "tiendatMysql@2003",
     "database": "books_store",
     "host": "localhost",
     "dialect": "mysql",

@@ -1,6 +1,7 @@
 import { Op } from 'sequelize'
 import db from '~/models'
 import slugify from '~/utils/slugify'
+import getOrSetCache from '~/utils/getOrSetCache'
 
 const createNew = async (reqBody) => {
   try {
@@ -15,28 +16,39 @@ const createNew = async (reqBody) => {
   }
 }
 const getAll = async (reqQuery) => {
-  let { page, limit, name } = reqQuery
-  page = parseInt(page)
-  limit = parseInt(limit)
+  let { page, limit, name, category } = reqQuery
+  page = parseInt(page) || 1
+  limit = parseInt(limit) || 10
+  const offset = (page - 1) * limit
   try {
-    if (page && limit) {
-      let offset = (page - 1) * limit
-      const { count, rows } = await db.Book.findAndCountAll({
-        offset,
-        limit,
-        attributes: { exclude: ['createdAt', 'updatedAt'] }
-      })
-      let totalPages = Math.ceil(count / limit)
-      return { totalRows: count, totalPages, books: rows }
-    } else if (name) {
+    if (name) {
       return await db.Book.findAll({
         where: { name: { [Op.like]: `%${name}%` } },
-        limit: 9,
+        limit,
         attributes: { exclude: ['createdAt', 'updatedAt'] }
       })
     }
 
-    return await db.Book.findAll({ include: [{ model: db.Supplier }, { model: db.Category }], order: [['id', 'DESC']] })
+    if (category) {
+      const { count, rows } = await db.Book.findAndCountAll({
+        where: { categoryId: parseInt(category) },
+        include: [{ model: db.Category }],
+        offset,
+        limit,
+        attributes: { exclude: ['createdAt', 'updatedAt'] }
+      })
+
+      return { totalRows: count, totalPages: Math.ceil(count / limit), books: rows }
+    }
+
+    const { count, rows } = await getOrSetCache(`books-page:${page}`, async () => {
+      return await db.Book.findAndCountAll({
+        offset,
+        limit,
+        attributes: { exclude: ['createdAt', 'updatedAt'] }
+      })
+    })
+    return { totalRows: count, totalPages: Math.ceil(count / limit), books: rows }
   } catch (error) {
     throw error
   }
