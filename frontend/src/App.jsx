@@ -16,6 +16,7 @@ import User from './pages/User'
 import Profile from './pages/User/Profile/Profile'
 import Order from './pages/User/Order/Order'
 import AdminOrder from './pages/Admin/Order'
+import FilterPage from '~/pages/Filter'
 
 function App() {
   const router = createBrowserRouter([
@@ -29,7 +30,8 @@ function App() {
         { path: 'register', element: <Register /> },
         { path: 'chi-tiet-sach/:slug/:id', element: <BookDetail /> },
         { path: 'checkout', element: <Checkout /> },
-        { path: 'my-cart', element: <Cart /> }
+        { path: 'my-cart', element: <Cart /> },
+        { path: 'filter/:id', element: <FilterPage /> }
       ]
     },
     {

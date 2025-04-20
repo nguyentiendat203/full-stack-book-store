@@ -28,13 +28,13 @@ function Book() {
     {
       title: 'Category',
       render: (data) => {
-        return <span>{data.Category.name}</span>
+        return <span>{data.Category?.name}</span>
       }
     },
     {
       title: 'Supplier',
       render: (data) => {
-        return <span>{data.Supplier.name}</span>
+        return <span>{data.Supplier?.name}</span>
       }
     },
     {
@@ -116,7 +116,7 @@ function Book() {
   const fetchAllBook = async () => {
     try {
       const res = await bookAPI.getAllBook()
-      setDataSource(res)
+      setDataSource(res.books)
     } catch (err) {
       toast.error(err.response.data.message)
     }

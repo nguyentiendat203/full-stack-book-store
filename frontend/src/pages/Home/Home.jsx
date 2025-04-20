@@ -12,7 +12,7 @@ function Home() {
 
   const fetchAllBook = async () => {
     try {
-      const res = await bookAPI.getAllBook(currentPage, 8)
+      const res = await bookAPI.getAllBook(currentPage)
       setListBooks(res.books)
       setTotalRecords(res.totalRows)
     } catch (error) {
@@ -38,7 +38,7 @@ function Home() {
         listBooks={listBooks}
         setCurrentPage={setCurrentPage}
         totalRecords={totalRecords}
-        currentLimit={8}
+        currentLimit={10}
         iconTitle={<FontAwesomeIcon icon={faList} />}
         title='Tất cả sản phẩm'
       />

@@ -1,8 +1,8 @@
 import axiosClient from './axiosClient'
 
 const bookAPI = {
-  getAllBook: (page, limit) => {
-    const url = `/book/read?page=${page}&limit=${limit}`
+  getAllBook: (page, limit, categoryId) => {
+    const url = `/book/read?page=${page}&limit=${limit}&category=${categoryId || ''}`
     return axiosClient.get(url)
   },
   searchBook: (name) => {

@@ -15,13 +15,13 @@ import bookAPI from '~/api/bookAPI'
 import { toast } from 'react-toastify'
 import useDebounce from '~/hooks/useDebounce'
 import { Empty } from 'antd'
+import Category from '~/components/Header/DropDowns/Category/Category'
 
 function Header() {
   const { currentUser } = useContext(AuthContext)
   const [listBooksSearch, setListBooksSearch] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [showResult, setShowResult] = useState(false)
-  const navigate = useNavigate()
 
   const valueSearchDebounce = useDebounce(searchValue, 500)
 
@@ -86,6 +86,7 @@ function Header() {
                 <img src={fahasa} alt='none' />
               </NavLink>
             </div>
+            <Category />
 
             <div className='flex-1 mx-6 w-full'>
               <div className='flex items-center relative'>
