@@ -12,7 +12,7 @@ function Home() {
 
   const fetchAllBook = async () => {
     try {
-      const res = await bookAPI.getAllBook(currentPage)
+      const res = await bookAPI.getAllBook(currentPage, 10)
       setListBooks(res.books)
       setTotalRecords(res.totalRows)
     } catch (error) {

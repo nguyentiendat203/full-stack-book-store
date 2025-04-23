@@ -31,7 +31,8 @@ function App() {
         { path: 'chi-tiet-sach/:slug/:id', element: <BookDetail /> },
         { path: 'checkout', element: <Checkout /> },
         { path: 'my-cart', element: <Cart /> },
-        { path: 'filter/:id', element: <FilterPage /> }
+        { path: 'filter/:parentId', element: <FilterPage /> },
+        { path: 'filter/:parentId/:id', element: <FilterPage /> }
       ]
     },
     {

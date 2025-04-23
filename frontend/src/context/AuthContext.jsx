@@ -6,16 +6,8 @@ export const AuthContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')) || null)
   const [quantityCart, setQuantityCart] = useState(0)
 
-  const [category, setCategory] = useState(JSON.parse(localStorage.getItem('category')) || '')
-  const [idSubCate, setIdSubCate] = useState(JSON.parse(localStorage.getItem('idSubCate')) || null)
-  const [subcategories, setSubCategories] = useState(JSON.parse(localStorage.getItem('subcategories')) || [])
-
   const updateUser = (data) => {
     setCurrentUser(data)
-  }
-
-  const updateSubCategories = (data) => {
-    setSubCategories([...data])
   }
 
   const countQuantityCart = async (userId) => {
@@ -34,18 +26,14 @@ export const AuthContextProvider = ({ children }) => {
     }
   }, [currentUser])
 
-  useEffect(() => {
-    localStorage.setItem('idSubCate', JSON.stringify(idSubCate))
-    localStorage.setItem('category', JSON.stringify(category))
-  }, [idSubCate])
-
-  useEffect(() => {
-    localStorage.setItem('subcategories', JSON.stringify(subcategories))
-  }, [subcategories])
-
   return (
     <AuthContext.Provider
-      value={{ currentUser, updateUser, quantityCart, countQuantityCart, subcategories, setSubCategories, category, setCategory, idSubCate, setIdSubCate, updateSubCategories }}
+      value={{
+        currentUser,
+        updateUser,
+        quantityCart,
+        countQuantityCart
+      }}
     >
       {children}
     </AuthContext.Provider>

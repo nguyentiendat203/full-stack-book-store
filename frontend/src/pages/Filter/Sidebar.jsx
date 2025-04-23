@@ -1,19 +1,47 @@
-import { useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { AuthContext } from '~/context/AuthContext'
+import bookAPI from '~/api/bookAPI'
+import useBookStore from '~/store/useBookStore'
 
 const priceRanges = [
-  { title: '0đ - 150,000đ', min: 0, max: 150000 },
-  { title: '150,000đ - 300,000đ', min: 150000, max: 300000 },
-  { title: '300,000đ - 500,000đ', min: 300000, max: 500000 },
-  { title: '500,000đ - 700,000đ', min: 500000, max: 700000 },
-  { title: '700,000đ - Trở Lên', min: 700000, max: null }
+  { id: 0, title: '0đ - 150,000đ', min: 0, max: 150000 },
+  { id: 1, title: '150,000đ - 300,000đ', min: 150000, max: 300000 },
+  { id: 2, title: '300,000đ - 500,000đ', min: 300000, max: 500000 },
+  { id: 3, title: '500,000đ - 700,000đ', min: 500000, max: 700000 },
+  { id: 4, title: '700,000đ - Trở Lên', min: 700000, max: 9999999 }
 ]
 
 const genres = ['Comedy', 'Fantasy', 'Romance', 'Horror', 'Mystery']
 
 export const Sidebar = () => {
-  const { subcategories, category, idSubCate, setIdSubCate } = useContext(AuthContext)
+  const { subcategories, idSubCate, setIdSubCate, idCategory, category, setBooks } = useBookStore()
+
+  const [checkedInputId, setCheckedInputId] = useState()
+  const [minPrice, setMinPrice] = useState()
+  const [maxPrice, setMaxPrice] = useState()
+
+  const handleFilterPrice = (range) => {
+    if (checkedInputId === range.id) {
+      setCheckedInputId(null)
+      setMinPrice(null)
+      setMaxPrice(null)
+    } else {
+      setCheckedInputId(range.id)
+      setMinPrice(range.min)
+      setMaxPrice(range.max)
+    }
+  }
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await bookAPI.getAllBook(1, 12, idCategory, idSubCate, minPrice, maxPrice)
+        setBooks(response.books)
+      } catch (error) {
+        console.error('Error fetching products:', error)
+      }
+    }
+    fetchBooks()
+  }, [minPrice, maxPrice])
 
   return (
     <div className='w-64 flex-shrink-0'>
@@ -21,15 +49,17 @@ export const Sidebar = () => {
         <div>
           <h3 className='font-bold mb-3'>NHÓM SẢN PHẨM</h3>
           <div className='space-y-1'>
-            <span className='block py-1.5 text-sm '>{category}</span>
+            <NavLink to={`/filter/${idCategory}`} onClick={() => setIdSubCate('')} className={`text-gray-600 text-sm  ${!idSubCate ? 'text-orange-500' : ''}`}>
+              {category}
+            </NavLink>
+            {/* <span className={`block py-1.5 text-sm ${!idSubCate ? 'text-orange-500' : ''}`}>{category}</span> */}
             <div className='ml-4'>
               {subcategories.map((subcategory, index) => (
                 <NavLink
-                  to={`/filter/${subcategory.id}`}
+                  to={`/filter/${idCategory}/${subcategory.id}`}
                   key={index}
                   onClick={() => {
                     setIdSubCate(subcategory.id)
-                    localStorage.setItem('idSubCate', JSON.stringify(subcategory.id))
                   }}
                   className={`block py-1.5 text-sm  ${subcategory.id === idSubCate ? 'text-orange-500' : ''} hover:text-orange-500`}
                 >
@@ -42,16 +72,16 @@ export const Sidebar = () => {
 
         <div>
           <h3 className='font-bold mb-3'>GIÁ</h3>
-          <div className='space-y-2'>
-            {priceRanges.map((range, index) => (
-              <div key={index}>
-                <div className='flex items-center gap-2 text-sm '>
-                  <input type='radio' id={index} name='price' value={{ min: range.min, max: range.max }} className='cursor-pointer rounded border-gray-300' />
-                  <label className='cursor-pointer'>{range.title}</label>
+          <ul className='space-y-2'>
+            {priceRanges.map((range) => (
+              <li key={range.id}>
+                <div onClick={() => handleFilterPrice(range)} className='inline-flex items-center gap-2 text-sm cursor-pointer'>
+                  <input type='checkbox' checked={range.id === checkedInputId && true} className='accent-orange-500 cursor-pointer' />
+                  <span>{range.title}</span>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
 
         <div>

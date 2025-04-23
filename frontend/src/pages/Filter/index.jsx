@@ -1,56 +1,73 @@
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
+import { faChevronDown, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { NavLink, useParams } from 'react-router-dom'
 import bookAPI from '~/api/bookAPI'
+import { categoryAPI } from '~/api/categoryAPI'
 import { CardBook } from '~/components/CardBook'
-import { AuthContext } from '~/context/AuthContext'
 import { Sidebar } from '~/pages/Filter/Sidebar'
+import useBookStore from '~/store/useBookStore'
 
 export default function FilterPage() {
-  const { id } = useParams()
-  const { subcategories, category, idSubCate } = useContext(AuthContext)
+  const { parentId, id } = useParams()
+  const { subcategories, category, idSubCate, setIdSubCate, idCategory, books, setBooks } = useBookStore()
 
   const [sortBy, setSortBy] = useState('Bán Chạy Tuần')
   const [itemsPerPage, setItemsPerPage] = useState('24 sản phẩm')
   const [subCateName, setSubCateName] = useState('')
-  const [books, setBooks] = useState([])
+
+  const fetchAllBook = (page, limit, categoryId, subCateId) => {
+    bookAPI.getAllBook(page, limit, categoryId, subCateId).then((res) => {
+      setBooks(res.books)
+    })
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await categoryAPI.getSubCategories(parentId)
+        subcategories(response)
+        fetchAllBook(1, 12, parentId, null)
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+    fetchData()
+  }, [parentId])
 
   useEffect(() => {
     const cate = subcategories.find((sub) => sub.id === idSubCate)
     if (cate) {
       setSubCateName(cate.name)
     }
-    const fetchProducts = async () => {
-      try {
-        const response = await bookAPI.getAllBook(1, 10, id)
-        setBooks(response.books)
-      } catch (error) {
-        console.error('Error fetching products:', error)
-      }
+    if (id) {
+      fetchAllBook(1, 12, null, id)
+    } else {
+      fetchAllBook(1, 12, parentId, null)
     }
-    fetchProducts()
   }, [id])
 
   return (
-    <div className='container mx-auto p-2'>
+    <div className='container mx-aut'>
       {/* Breadcrumb */}
-      <div className='flex items-center gap-2 text-sm mb-6'>
+      <div className='flex items-center gap-2 text-sm text-gray-500 mb-2'>
         <a href='/' className='text-gray-600 hover:text-red-600'>
           TRANG CHỦ
         </a>
-        <span className='text-gray-400'>/</span>
-        <a href='#' className='text-gray-600 hover:text-red-600'>
-          TẤT CẢ NHÓM SẢN PHẨM
-        </a>
-        <span className='text-gray-400'>/</span>
-        <a href='#' className='text-gray-600 hover:text-red-600'>
+
+        <FontAwesomeIcon icon={faChevronRight} />
+        <NavLink to={`/filter/${idCategory}`} onClick={() => setIdSubCate('')} className={`text-gray-600  ${!idSubCate ? 'text-orange-500 font-medium' : ''}`}>
           {category}
-        </a>
-        <span className='text-gray-400'>/</span>
-        <a href='#' className='text-gray-600 hover:text-red-600'>
-          {subCateName}
-        </a>
+        </NavLink>
+
+        {id && (
+          <>
+            <FontAwesomeIcon icon={faChevronRight} />
+            <a href='#' className='text-orange-500 font-medium'>
+              {subCateName}
+            </a>
+          </>
+        )}
       </div>
 
       <div className='flex gap-5'>

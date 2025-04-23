@@ -13,7 +13,7 @@ export const CardBook = ({ book }) => {
             <p className='text-sm text-gray-700 h-12 py-2  line-clamp-2 '>{book.name}</p>
 
             <div className='h-10 my-2'>
-              <span className='text-red-600 font-medium text-xl'>{((book.price * (100 - book.discount)) / 100).toLocaleString('vi', { style: 'currency', currency: 'VND' })}</span>
+              <span className='text-red-600 font-medium text-xl'>{book.discountedPrice.toLocaleString('vi', { style: 'currency', currency: 'VND' })}</span>
               <p className='text-gray-400 line-through text-sm'>{book.price.toLocaleString('vi', { style: 'currency', currency: 'VND' })}</p>
             </div>
             <div className='flex justify-between items-center'>
