@@ -3,6 +3,11 @@ import db from '~/models'
 import slugify from '~/utils/slugify'
 import getOrSetCache from '~/utils/getOrSetCache'
 
+const responseBookData = async (limit, condition) => {
+  const { count, rows } = await db.Book.findAndCountAll({ ...condition })
+  return { totalRows: count, totalPages: Math.ceil(count / limit), books: rows }
+}
+
 const createNew = async (reqBody) => {
   try {
     const newBook = {
@@ -16,7 +21,7 @@ const createNew = async (reqBody) => {
   }
 }
 const getAll = async (reqQuery) => {
-  let { page, limit, name, category } = reqQuery
+  let { page, limit, name, parentCategory, category, price } = reqQuery
   page = parseInt(page) || 1
   limit = parseInt(limit) || 10
   const offset = (page - 1) * limit
@@ -29,16 +34,56 @@ const getAll = async (reqQuery) => {
       })
     }
 
+    const whereClause = {}
+
+    // === Price filter ===
+    let priceFilter = {}
+    if (price) {
+      const [minPrice, maxPrice] = price.split(',').map((p) => parseInt(p))
+      if (!isNaN(minPrice) && !isNaN(maxPrice)) {
+        priceFilter = {
+          discountedPrice: {
+            [Op.gte]: minPrice,
+            [Op.lte]: maxPrice
+          }
+        }
+      }
+    }
+
+    // === Category filter ===
     if (category) {
-      const { count, rows } = await db.Book.findAndCountAll({
-        where: { categoryId: parseInt(category) },
+      whereClause.categoryId = parseInt(category)
+      Object.assign(whereClause, priceFilter)
+
+      const condition = {
+        where: whereClause,
         include: [{ model: db.Category }],
         offset,
         limit,
         attributes: { exclude: ['createdAt', 'updatedAt'] }
-      })
+      }
 
-      return { totalRows: count, totalPages: Math.ceil(count / limit), books: rows }
+      return await responseBookData(limit, condition)
+    }
+
+    // === Parent Category filter ===
+    if (parentCategory) {
+      Object.assign(whereClause, priceFilter)
+
+      const condition = {
+        where: whereClause,
+        include: [
+          {
+            model: db.Category,
+            where: { listCateId: parseInt(parentCategory) }
+          }
+        ],
+        offset,
+        limit,
+        attributes: { exclude: ['createdAt', 'updatedAt'] }
+      }
+
+      return await responseBookData(limit, condition)
     }
 
     const { count, rows } = await getOrSetCache(`books-page:${page}`, async () => {

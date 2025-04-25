@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DOUBLE
       },
       discount: DataTypes.INTEGER,
+      discountedPrice: DataTypes.DOUBLE,
       stock: {
         type: DataTypes.INTEGER
       },

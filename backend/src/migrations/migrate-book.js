@@ -28,6 +28,9 @@ module.exports = {
       discount: {
         type: Sequelize.INTEGER
       },
+      discountedPrice: {
+        type: Sequelize.DOUBLE
+      },
       stock: {
         allowNull: false,
         type: Sequelize.INTEGER

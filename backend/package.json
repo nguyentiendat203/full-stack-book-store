@@ -5,7 +5,7 @@
   "author": "DatDev",
   "description": "",
   "engines": {
-    "node": "18.20.4"
+    "node": ">=18"
   },
   "scripts": {
     "lint": "eslint src --ext js --report-unused-disable-directives --max-warnings 0",
