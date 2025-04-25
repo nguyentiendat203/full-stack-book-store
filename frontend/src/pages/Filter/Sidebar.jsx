@@ -14,7 +14,7 @@ const priceRanges = [
 const genres = ['Comedy', 'Fantasy', 'Romance', 'Horror', 'Mystery']
 
 export const Sidebar = () => {
-  const { subcategories, idSubCate, setIdSubCate, idCategory, category, setBooks } = useBookStore()
+  const { subcategories, idSubCate, setIdSubCate, idCategory, category, setBooks, sortBy, itemsPerPage } = useBookStore()
 
   const [checkedInputId, setCheckedInputId] = useState()
   const [minPrice, setMinPrice] = useState()
@@ -34,7 +34,7 @@ export const Sidebar = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const response = await bookAPI.getAllBook(1, 12, idCategory, idSubCate, minPrice, maxPrice)
+        const response = await bookAPI.getAllBook(1, itemsPerPage, idCategory, idSubCate, sortBy, minPrice, maxPrice)
         setBooks(response.books)
       } catch (error) {
         console.error('Error fetching products:', error)

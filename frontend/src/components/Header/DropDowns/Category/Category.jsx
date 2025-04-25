@@ -37,7 +37,7 @@ function Category() {
   const fetchSubCategories = async (id) => {
     try {
       const res = await categoryAPI.getSubCategories(id)
-      const resBooks = await bookAPI.getAllBook(1, 12, id)
+      const resBooks = await bookAPI.getAllBook(1, 24, id)
       setBooks(resBooks.books)
       setSubcategories(res)
     } catch (error) {
@@ -73,7 +73,6 @@ function Category() {
                     key={index}
                     className='relative'
                     onClick={() => {
-                      setIdCategory(category.id)
                       setCategory(category.name)
                       setIdSubCate(null)
                       fetchSubCategories(category.id)

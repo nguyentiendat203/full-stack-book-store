@@ -1,8 +1,8 @@
 import axiosClient from './axiosClient'
 
 const bookAPI = {
-  getAllBook: (page, limit, parentId, categoryId, minPrice, maxPrice) => {
-    const url = `/book/read?page=${page}&limit=${limit}&parentCategory=${parentId || ''}&category=${categoryId || ''}&price=${minPrice},${maxPrice}`
+  getAllBook: (page, limit, parentId, categoryId, sortBy, minPrice, maxPrice) => {
+    const url = `/book/read?page=${page}&limit=${limit}&parentCategory=${parentId || ''}&category=${categoryId || ''}&sortBy=${sortBy || ''}&price=${minPrice},${maxPrice}`
     return axiosClient.get(url)
   },
   searchBook: (name) => {

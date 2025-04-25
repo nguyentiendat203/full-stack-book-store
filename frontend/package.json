@@ -5,7 +5,7 @@
   "type": "module",
   "author": "",
   "engines": {
-    "node": "18.20.4"
+    "node": ">=18"
   },
   "scripts": {
     "dev": "vite --host",

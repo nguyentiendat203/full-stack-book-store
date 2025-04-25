@@ -12,12 +12,16 @@ const useBookStore = create(
       category: '',
       subcategories: [],
       books: [],
+      sortBy: '',
+      itemsPerPage: 12,
 
       setIdCategory: (id) => set({ idCategory: id }),
       setIdSubCate: (id) => set({ idSubCate: id }),
       setCategory: (name) => set({ category: name }),
       setSubcategories: (list) => set({ subcategories: list }),
-      setBooks: (books) => set({ books })
+      setBooks: (books) => set({ books }),
+      setSortBy: (sort) => set({ sortBy: sort }),
+      setItemsPerPage: (items) => set({ itemsPerPage: items })
     }),
     {
       name: 'book-storage',
