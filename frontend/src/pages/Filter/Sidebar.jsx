@@ -1,6 +1,8 @@
+import { set } from 'lodash'
 import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import bookAPI from '~/api/bookAPI'
+import { categoryAPI } from '~/api/categoryAPI'
 import useBookStore from '~/store/useBookStore'
 
 const priceRanges = [
@@ -13,12 +15,14 @@ const priceRanges = [
 
 const genres = ['Comedy', 'Fantasy', 'Romance', 'Horror', 'Mystery']
 
-export const Sidebar = () => {
-  const { subcategories, idSubCate, setIdSubCate, idCategory, category, setBooks, sortBy, itemsPerPage } = useBookStore()
+export const Sidebar = ({ parentId, setCurrentPage }) => {
+  const { subcategories, setSubcategories, idSubCate, setIdSubCate, idCategory, setIdCategory, category, setCategory, setBooks, sortBy, itemsPerPage, setItemsPerPage } =
+    useBookStore()
 
   const [checkedInputId, setCheckedInputId] = useState()
   const [minPrice, setMinPrice] = useState()
   const [maxPrice, setMaxPrice] = useState()
+  const [categories, setCategories] = useState([])
 
   const handleFilterPrice = (range) => {
     if (checkedInputId === range.id) {
@@ -32,6 +36,12 @@ export const Sidebar = () => {
     }
   }
   useEffect(() => {
+    categoryAPI.getAllCategories().then((res) => {
+      setCategories(res)
+    })
+  }, [])
+
+  useEffect(() => {
     const fetchBooks = async () => {
       try {
         const response = await bookAPI.getAllBook(1, itemsPerPage, idCategory, idSubCate, sortBy, minPrice, maxPrice)
@@ -43,31 +53,89 @@ export const Sidebar = () => {
     fetchBooks()
   }, [minPrice, maxPrice])
 
+  const fetchSubCategories = (id) => {
+    categoryAPI
+      .getSubCategories(id)
+      .then((res) => {
+        setSubcategories(res)
+      })
+      .catch((error) => {
+        console.error('Error fetching subcategories:', error)
+      })
+  }
+
   return (
     <div className='w-64 flex-shrink-0'>
       <div className='bg-white rounded-lg shadow p-4 space-y-6'>
         <div>
-          <h3 className='font-bold mb-3'>NHÓM SẢN PHẨM</h3>
-          <div className='space-y-1'>
-            <NavLink to={`/filter/${idCategory}`} onClick={() => setIdSubCate('')} className={`text-gray-600 text-sm  ${!idSubCate ? 'text-orange-500' : ''}`}>
-              {category}
+          <h3 className='font-bold'>NHÓM SẢN PHẨM</h3>
+          <div className=''>
+            <NavLink
+              to='/filter'
+              onClick={() => {
+                setCurrentPage(1)
+                setIdCategory('')
+                setIdSubCate('')
+                setSubcategories([])
+                setItemsPerPage(12)
+              }}
+              className={`block text-gray-600 cursor-pointer my-2 uppercase ${!parentId && 'text-orange-500'}`}
+            >
+              Tất cả thể loại
             </NavLink>
-            {/* <span className={`block py-1.5 text-sm ${!idSubCate ? 'text-orange-500' : ''}`}>{category}</span> */}
-            <div className='ml-4'>
-              {subcategories.map((subcategory, index) => (
-                <NavLink
-                  to={`/filter/${idCategory}/${subcategory.id}`}
-                  key={index}
-                  onClick={() => {
-                    setIdSubCate(subcategory.id)
-                  }}
-                  className={`block py-1.5 text-sm  ${subcategory.id === idSubCate ? 'text-orange-500' : ''} hover:text-orange-500`}
-                >
-                  {subcategory.name}
-                </NavLink>
-              ))}
-            </div>
+            {!parentId && (
+              <div className='ml-2 space-y-2 text-sm'>
+                {categories.map((category, index) => (
+                  <NavLink
+                    to={`/filter/${category.id}`}
+                    key={index}
+                    onClick={() => {
+                      setIdSubCate('')
+                      setCurrentPage(1)
+                      setItemsPerPage(12)
+                      setIdCategory(category.id)
+                      setCategory(category.name)
+                      fetchSubCategories(category.id)
+                    }}
+                    className='block hover:text-orange-500'
+                  >
+                    {category.name}
+                  </NavLink>
+                ))}
+              </div>
+            )}
           </div>
+          {idCategory && (
+            <div className='ml-2 space-y-1'>
+              <NavLink
+                to={`/filter/${idCategory}`}
+                onClick={() => {
+                  setIdSubCate('')
+                  setCurrentPage(1)
+                  setItemsPerPage(12)
+                }}
+                className={`text-gray-600 text-sm  ${!idSubCate ? 'text-orange-500' : ''}`}
+              >
+                {category}
+              </NavLink>
+              <div className='ml-3'>
+                {subcategories.map((subcategory, index) => (
+                  <NavLink
+                    to={`/filter/${idCategory}/${subcategory.id}`}
+                    key={index}
+                    onClick={() => {
+                      setIdSubCate(subcategory.id)
+                      setCurrentPage(1)
+                      setItemsPerPage(12)
+                    }}
+                    className={`block py-1.5 text-sm  ${subcategory.id === idSubCate ? 'text-orange-500' : ''} hover:text-orange-500`}
+                  >
+                    {subcategory.name}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <div>
@@ -79,20 +147,6 @@ export const Sidebar = () => {
                   <input type='checkbox' checked={range.id === checkedInputId && true} className='accent-orange-500 cursor-pointer' />
                   <span>{range.title}</span>
                 </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <h3 className='font-bold mb-3'>GENRES</h3>
-          <ul className='space-y-2'>
-            {genres.map((genre, index) => (
-              <li key={index}>
-                <label className='flex items-center gap-2 text-sm'>
-                  <input type='checkbox' className='rounded border-gray-300' />
-                  <span>{genre}</span>
-                </label>
               </li>
             ))}
           </ul>

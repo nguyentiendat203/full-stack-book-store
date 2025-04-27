@@ -31,6 +31,7 @@ function ModalBook({ isModalBook, setIsModalBook, fetchAllBook, action, dataModa
   const [imageUrl, setImageUrl] = useState()
   const [listCate, setListCate] = useState([])
   const [listSuppier, setListSuppier] = useState([])
+  const [listSubCategories, setListSubCategories] = useState([])
 
   const dataBookDefault = {
     name: '',
@@ -42,7 +43,8 @@ function ModalBook({ isModalBook, setIsModalBook, fetchAllBook, action, dataModa
     publishingYear: '',
     image: '',
     supplierId: '',
-    categoryId: ''
+    categoryId: '',
+    idSubCate: ''
   }
   const [dataBook, setDataBook] = useState(dataBookDefault)
 
@@ -55,7 +57,8 @@ function ModalBook({ isModalBook, setIsModalBook, fetchAllBook, action, dataModa
     pageNumber: true,
     publishingYear: true,
     supplierId: true,
-    categoryId: true
+    categoryId: true,
+    idSubCate: true
   }
   const [validInput, setValidInput] = useState(validInputDefault)
 
@@ -150,6 +153,17 @@ function ModalBook({ isModalBook, setIsModalBook, fetchAllBook, action, dataModa
     }
   }
 
+  const fetchSubCategories = (categoryId) => {
+    categoryAPI
+      .getSubCategories(categoryId)
+      .then((res) => {
+        setListSubCategories(res)
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message)
+      })
+  }
+
   useEffect(() => {
     fetchAllCateAndSup()
   }, [])
@@ -215,8 +229,24 @@ function ModalBook({ isModalBook, setIsModalBook, fetchAllBook, action, dataModa
             status={validInput.categoryId ? '' : 'error'}
             onChange={(value) => {
               handleChangeInput('categoryId', value)
+              fetchSubCategories(value)
             }}
             options={listCate.map((item) => {
+              return {
+                value: item.id,
+                label: item.name
+              }
+            })}
+            className='mt-2'
+          />
+          <Select
+            placeholder='Please select Sub-Category'
+            value={dataBook.idSubCate || undefined}
+            status={validInput.idSubCate ? '' : 'error'}
+            onChange={(value) => {
+              handleChangeInput('idSubCate', value)
+            }}
+            options={listSubCategories.map((item) => {
               return {
                 value: item.id,
                 label: item.name

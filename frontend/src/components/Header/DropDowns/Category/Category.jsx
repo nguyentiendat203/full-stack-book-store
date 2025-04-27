@@ -7,7 +7,7 @@ import { categoryAPI } from '~/api/categoryAPI'
 import useBookStore from '~/store/useBookStore'
 
 function Category() {
-  const { setSubcategories, setCategory, setIdSubCate, idCategory, setIdCategory, setBooks } = useBookStore()
+  const { setSubcategories, setCategory, setIdSubCate, idCategory, setIdCategory, setBooks, sortBy, setSortBy, itemsPerPage, setItemsPerPage } = useBookStore()
 
   const [isOpen, setIsOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState(0)
@@ -37,7 +37,7 @@ function Category() {
   const fetchSubCategories = async (id) => {
     try {
       const res = await categoryAPI.getSubCategories(id)
-      const resBooks = await bookAPI.getAllBook(1, 24, id)
+      const resBooks = await bookAPI.getAllBook(1, itemsPerPage, id, null, sortBy)
       setBooks(resBooks.books)
       setSubcategories(res)
     } catch (error) {
@@ -77,6 +77,8 @@ function Category() {
                       setIdSubCate(null)
                       fetchSubCategories(category.id)
                       setIsOpen(false)
+                      setSortBy('oldest')
+                      setItemsPerPage(12)
                     }}
                     onMouseEnter={() => {
                       setActiveCategory(index)

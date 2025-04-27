@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom'
 import DefaultLayout from './layout/DefaultLayout'
 import LogIn from './pages/Auth/LogIn'
 import Home from './pages/Home/Home'
@@ -17,12 +17,27 @@ import Profile from './pages/User/Profile/Profile'
 import Order from './pages/User/Order/Order'
 import AdminOrder from './pages/Admin/Order'
 import FilterPage from '~/pages/Filter'
+import { useEffect } from 'react'
+
+export function ScrollToTop({ children }) {
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
+  return children
+}
 
 function App() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <DefaultLayout />,
+      element: (
+        <ScrollToTop>
+          <DefaultLayout />
+        </ScrollToTop>
+      ),
       errorElement: <NotFound />,
       children: [
         { path: '', element: <Home /> },
@@ -31,6 +46,7 @@ function App() {
         { path: 'chi-tiet-sach/:slug/:id', element: <BookDetail /> },
         { path: 'checkout', element: <Checkout /> },
         { path: 'my-cart', element: <Cart /> },
+        { path: 'filter', element: <FilterPage /> },
         { path: 'filter/:parentId', element: <FilterPage /> },
         { path: 'filter/:parentId/:id', element: <FilterPage /> }
       ]

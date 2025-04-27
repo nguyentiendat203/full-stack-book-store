@@ -12,8 +12,9 @@ const useBookStore = create(
       category: '',
       subcategories: [],
       books: [],
-      sortBy: '',
+      sortBy: 'oldest',
       itemsPerPage: 12,
+      totalRecords: 0,
 
       setIdCategory: (id) => set({ idCategory: id }),
       setIdSubCate: (id) => set({ idSubCate: id }),
@@ -21,7 +22,8 @@ const useBookStore = create(
       setSubcategories: (list) => set({ subcategories: list }),
       setBooks: (books) => set({ books }),
       setSortBy: (sort) => set({ sortBy: sort }),
-      setItemsPerPage: (items) => set({ itemsPerPage: items })
+      setItemsPerPage: (items) => set({ itemsPerPage: items }),
+      setTotalRecords: (total) => set({ totalRecords: total })
     }),
     {
       name: 'book-storage',
