@@ -12,7 +12,9 @@ const createNew = async (reqBody) => {
   try {
     const newBook = {
       ...reqBody,
-      slug: slugify(reqBody.name)
+      slug: slugify(reqBody.name),
+      discountedPrice: reqBody.price - (reqBody.price * reqBody.discount) / 100,
+      categoryId: reqBody.idSubCate
     }
 
     return await db.Book.create(newBook)
@@ -21,7 +23,7 @@ const createNew = async (reqBody) => {
   }
 }
 const getAll = async (reqQuery) => {
-  let { page, limit, name, parentCategory, category, price } = reqQuery
+  let { page, limit, name, parentCategory, category, price, sortBy } = reqQuery
   page = parseInt(page) || 1
   limit = parseInt(limit) || 10
   const offset = (page - 1) * limit
@@ -50,6 +52,18 @@ const getAll = async (reqQuery) => {
       }
     }
 
+    // === Sorting ===
+    let order = []
+    if (sortBy === 'price_asc') {
+      order.push(['discountedPrice', 'ASC'])
+    } else if (sortBy === 'price_desc') {
+      order.push(['discountedPrice', 'DESC'])
+    } else if (sortBy === 'latest') {
+      order.push(['createdAt', 'DESC'])
+    } else if (sortBy === 'oldest') {
+      order.push(['createdAt', 'ASC'])
+    }
+
     // === Category filter ===
     if (category) {
       whereClause.categoryId = parseInt(category)
@@ -60,6 +74,7 @@ const getAll = async (reqQuery) => {
         include: [{ model: db.Category }],
         offset,
         limit,
+        order,
         attributes: { exclude: ['createdAt', 'updatedAt'] }
       }
 
@@ -80,18 +95,25 @@ const getAll = async (reqQuery) => {
         ],
         offset,
         limit,
+        order,
         attributes: { exclude: ['createdAt', 'updatedAt'] }
       }
 
       return await responseBookData(limit, condition)
     }
 
+    const condition = {
+      where: whereClause,
+      include: [{ model: db.Category }],
+      offset,
+      limit,
+      order,
+      attributes: { exclude: ['createdAt', 'updatedAt'] }
+    }
+
+    // return await responseBookData(limit, condition)
     const { count, rows } = await getOrSetCache(`books-page:${page}`, async () => {
-      return await db.Book.findAndCountAll({
-        offset,
-        limit,
-        attributes: { exclude: ['createdAt', 'updatedAt'] }
-      })
+      return await db.Book.findAndCountAll({ ...condition })
     })
     return { totalRows: count, totalPages: Math.ceil(count / limit), books: rows }
   } catch (error) {
