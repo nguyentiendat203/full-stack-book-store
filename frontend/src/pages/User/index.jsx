@@ -1,13 +1,13 @@
 import { BellOutlined, ContainerOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Menu } from 'antd'
 import { useContext } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { AuthContext } from '~/context/AuthContext'
 import Header from '~/components/Header/Header'
 import Footer from '~/components/Footer/Footer'
 
-function User() {
+function User({ children }) {
   const items = [
     {
       key: 'sub1',
@@ -73,9 +73,7 @@ function User() {
                 </div>
               </div>
             </div>
-            <div className='col-span-4'>
-              <Outlet />
-            </div>
+            <div className='col-span-4'>{children}</div>
           </div>
         </div>
       </div>

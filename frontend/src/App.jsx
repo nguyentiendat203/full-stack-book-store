@@ -3,7 +3,7 @@ import DefaultLayout from './layout/DefaultLayout'
 import LogIn from './pages/Auth/LogIn'
 import Home from './pages/Home/Home'
 import Register from './pages/Auth/Register'
-import PrivateLayout from './layout/PrivateLayout'
+import AdminLayout from './layout/AdminLayout'
 import Cart from './pages/Cart/Cart'
 import BookDetail from './components/BookDetail/BookDetail'
 import Checkout from './pages/Cart/Checkout/Checkout'
@@ -18,6 +18,7 @@ import Order from './pages/User/Order/Order'
 import AdminOrder from './pages/Admin/Order'
 import FilterPage from '~/pages/Filter'
 import { useEffect } from 'react'
+import PrivateLayout from '~/layout/PrivateLayout'
 
 export function ScrollToTop({ children }) {
   const { pathname } = useLocation()
@@ -53,21 +54,70 @@ function App() {
     },
     {
       path: '/',
-      element: <User />,
+      element: <PrivateLayout />,
       children: [
-        { path: 'user/order', element: <Order /> },
-        { path: 'user/profile', element: <Profile /> }
+        {
+          path: 'user/order',
+          element: (
+            <User>
+              <Order />
+            </User>
+          )
+        },
+        {
+          path: 'user/profile',
+          element: (
+            <User>
+              <Profile />
+            </User>
+          )
+        }
       ]
     },
     {
       path: '/',
       element: <PrivateLayout />,
       children: [
-        { path: 'dash-board/book', element: <Book /> },
-        { path: 'dash-board/user', element: <ListUser /> },
-        { path: 'dash-board/order', element: <AdminOrder /> },
-        { path: 'dash-board/role', element: <Role /> },
-        { path: 'dash-board/permission', element: <GroupRole /> }
+        {
+          path: 'dash-board/book',
+          element: (
+            <AdminLayout>
+              <Book />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'dash-board/user',
+          element: (
+            <AdminLayout>
+              <ListUser />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'dash-board/order',
+          element: (
+            <AdminLayout>
+              <AdminOrder />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'dash-board/role',
+          element: (
+            <AdminLayout>
+              <Role />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'dash-board/permission',
+          element: (
+            <AdminLayout>
+              <GroupRole />
+            </AdminLayout>
+          )
+        }
       ]
     }
   ])

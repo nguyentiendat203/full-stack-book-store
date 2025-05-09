@@ -39,6 +39,7 @@ module.exports = {
     'comma-dangle': 1,
     'comma-spacing': 1,
     'arrow-spacing': 1,
-    'no-extra-semi': 1
+    'no-extra-semi': 1,
+    'no-unused-labels': 1
   }
 }
