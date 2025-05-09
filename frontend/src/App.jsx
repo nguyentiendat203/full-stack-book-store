@@ -52,8 +52,6 @@ function App() {
         { path: 'login', element: <LogIn /> },
         { path: 'register', element: <Register /> },
         { path: 'chi-tiet-sach/:slug/:id', element: <BookDetail /> },
-        { path: 'checkout', element: <Checkout /> },
-        { path: 'my-cart', element: <Cart /> },
         { path: 'filter', element: <FilterPage /> },
         { path: 'filter/:parentId', element: <FilterPage /> },
         { path: 'filter/:parentId/:id', element: <FilterPage /> }
@@ -63,6 +61,8 @@ function App() {
       path: '/',
       element: <PrivateLayout />,
       children: [
+        { path: 'my-cart', element: <Cart /> },
+        { path: 'checkout', element: <Checkout /> },
         {
           path: 'user/order',
           element: (

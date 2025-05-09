@@ -2,23 +2,23 @@ import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Rate } from 'antd'
 import { OpenAIOutlined } from '@ant-design/icons'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import bookAPI from '~/api/bookAPI'
 import cartAPI from '~/api/cartAPI'
-import { AuthContext } from '~/context/AuthContext'
 import { capitalizeWords } from '~/utils/capitalizeWords'
 import { formatPriceVND } from '~/utils/formatPriceVND'
 import CountQuantity from '../CountQuantity'
 import ListBook from '~/pages/Home/ListBook/ListBook'
 import Review from './Review/Review'
 import useAuthStore from '~/store/useAuthStore'
+import useCartStore from '~/store/useCartStore'
 
 function BookDetail() {
   const { id } = useParams()
   const { currentUser } = useAuthStore()
-  const { countQuantityCart } = useContext(AuthContext)
+  const { countQuantityCart } = useCartStore()
   const navigate = useNavigate()
 
   const [listBooksRecommend, setListBooksRecommend] = useState([])

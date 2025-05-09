@@ -1,5 +1,6 @@
 import axios from 'axios'
 import queryString from 'query-string'
+import { toast } from 'react-toastify'
 
 // Set up default config for http requests here
 // Please have a look at here `https://github.com/axios/axios#request- config` for the full list of configs
@@ -27,7 +28,9 @@ axiosClient.interceptors.response.use(
   },
   (error) => {
     // Handle errors
-    throw error
+
+    toast.error(error.response.data?.message)
+    return Promise.reject(error)
   }
 )
 

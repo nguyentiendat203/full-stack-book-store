@@ -1,13 +1,12 @@
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
-import { AuthContext } from '~/context/AuthContext'
 import useAuthStore from '~/store/useAuthStore'
+import useCartStore from '~/store/useCartStore'
 
 function Cart() {
   const { currentUser } = useAuthStore()
-  const { quantityCart } = useContext(AuthContext)
+  const { quantityCart } = useCartStore()
 
   return (
     <>

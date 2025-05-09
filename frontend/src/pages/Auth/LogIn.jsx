@@ -12,7 +12,7 @@ function LogIn() {
 
   const onFinish = (data) => {
     logIn(data)
-    navigate('/')
+    if (currentUser) return navigate('/')
   }
 
   if (currentUser) {

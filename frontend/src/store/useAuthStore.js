@@ -2,6 +2,7 @@ import { toast } from 'react-toastify'
 import { create } from 'zustand'
 import authAPI from '~/api/authAPI'
 import userAPI from '~/api/userAPI'
+import useCartStore from '~/store/useCartStore'
 
 const useAuthStore = create((set) => ({
   currentUser: null,
@@ -18,12 +19,18 @@ const useAuthStore = create((set) => ({
   },
 
   logIn: async (data) => {
-    set({ isLoggingIn: true })
-    const currentUser = await authAPI.logIn(data)
-    set({ currentUser })
-    localStorage.setItem('user', JSON.stringify(currentUser))
-    toast.success('Đăng nhập thành công')
-    set({ isLoggingIn: false })
+    try {
+      set({ isLoggingIn: true })
+      const currentUser = await authAPI.logIn(data)
+      set({ currentUser })
+      localStorage.setItem('user', JSON.stringify(currentUser))
+      useCartStore.getState().countQuantityCart()
+      toast.success('Đăng nhập thành công')
+    } catch (error) {
+      //
+    } finally {
+      set({ isLoggingIn: false })
+    }
   },
   logOut: async () => {
     await authAPI.logOut()

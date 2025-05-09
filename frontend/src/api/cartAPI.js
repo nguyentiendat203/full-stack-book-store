@@ -13,11 +13,11 @@ const cartAPI = {
     const url = '/user/my-cart'
     return axiosClient.get(url)
   },
-  updateCartItem: (userId, reqBody) => {
+  updateCartItem: (reqBody) => {
     const url = '/user/update-cart-quantity'
-    return axiosClient.post(url, reqBody)
+    return axiosClient.put(url, reqBody)
   },
-  deleteCartItem: (userId, bookId) => {
+  deleteCartItem: (bookId) => {
     const url = `/user/delete-cart-item/${bookId}`
     return axiosClient.delete(url)
   },
