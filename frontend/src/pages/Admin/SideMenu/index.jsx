@@ -4,14 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBook, faBug, faCodeCompare, faHome, faUserSecret } from '@fortawesome/free-solid-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { faRectangleList } from '@fortawesome/free-regular-svg-icons'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { AuthContext } from '~/context/AuthContext'
 import userAPI from '~/api/userAPI'
+import useAuthStore from '~/store/useAuthStore'
 
 function SideMenu() {
   const navigate = useNavigate()
-  const { currentUser } = useContext(AuthContext)
+  const { currentUser } = useAuthStore()
 
   const [listOrderByStatus, setListOrderByStatus] = useState({})
 

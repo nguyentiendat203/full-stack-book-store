@@ -1,10 +1,9 @@
 import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useContext } from 'react'
-import { AuthContext } from '~/context/AuthContext'
+import useAuthStore from '~/store/useAuthStore'
 
 function Header() {
-  const { currentUser } = useContext(AuthContext)
+  const { currentUser } = useAuthStore()
 
   return (
     <>

@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
 import { AuthContext } from '~/context/AuthContext'
+import useAuthStore from '~/store/useAuthStore'
 
 function Cart() {
-  const { currentUser, quantityCart } = useContext(AuthContext)
+  const { currentUser } = useAuthStore()
+  const { quantityCart } = useContext(AuthContext)
 
   return (
     <>

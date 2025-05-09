@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamation } from '@fortawesome/free-solid-svg-icons'
 import userAPI from '~/api/userAPI'
 import handleUploadImage from '~/utils/handleUploadImage'
+import useAuthStore from '~/store/useAuthStore'
 
 function Profile() {
   const getBase64 = (img, callback) => {
@@ -28,7 +29,8 @@ function Profile() {
     return isJpgOrPng && isLt2M
   }
 
-  const { currentUser, updateUser } = useContext(AuthContext)
+  const { currentUser, updateProfile } = useAuthStore()
+  const { updateUser } = useContext(AuthContext)
 
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState()
@@ -98,14 +100,8 @@ function Profile() {
     setDataProfile(_dataProfile)
   }
 
-  const handleSave = async () => {
-    try {
-      await userAPI.updateMe(dataProfile.id, dataProfile)
-      updateUser(dataProfile)
-      toast.success('Cập nhật thông tin thành công')
-    } catch (error) {
-      toast.error(error.response.data.message)
-    }
+  const handleSave = () => {
+    updateProfile(dataProfile)
   }
 
   const isFormValid = () => {
@@ -114,7 +110,7 @@ function Profile() {
 
   useEffect(() => {
     setDataProfile(currentUser)
-    setImageUrl(currentUser.avatar)
+    setImageUrl(currentUser?.avatar)
   }, [currentUser])
 
   useEffect(() => {

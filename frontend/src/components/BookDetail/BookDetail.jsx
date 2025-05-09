@@ -13,10 +13,12 @@ import { formatPriceVND } from '~/utils/formatPriceVND'
 import CountQuantity from '../CountQuantity'
 import ListBook from '~/pages/Home/ListBook/ListBook'
 import Review from './Review/Review'
+import useAuthStore from '~/store/useAuthStore'
 
 function BookDetail() {
   const { id } = useParams()
-  const { currentUser, countQuantityCart } = useContext(AuthContext)
+  const { currentUser } = useAuthStore()
+  const { countQuantityCart } = useContext(AuthContext)
   const navigate = useNavigate()
 
   const [listBooksRecommend, setListBooksRecommend] = useState([])

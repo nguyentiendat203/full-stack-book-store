@@ -5,20 +5,20 @@ import fahasa from '~/assets/fahasa-logo.webp'
 import Notification from './DropDowns/Notification'
 import Cart from './DropDowns/Cart'
 import Profile from './DropDowns/Profile'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import Tippy from '@tippyjs/react/headless'
 import { AppstoreOutlined, RiseOutlined, SettingOutlined } from '@ant-design/icons'
-import { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '~/context/AuthContext'
+import { useEffect, useState } from 'react'
 import cartAPI from '~/api/cartAPI'
 import bookAPI from '~/api/bookAPI'
 import { toast } from 'react-toastify'
 import useDebounce from '~/hooks/useDebounce'
 import { Empty } from 'antd'
 import Category from '~/components/Header/DropDowns/Category/Category'
+import useAuthStore from '~/store/useAuthStore'
 
 function Header() {
-  const { currentUser } = useContext(AuthContext)
+  const { currentUser } = useAuthStore()
   const [listBooksSearch, setListBooksSearch] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [showResult, setShowResult] = useState(false)

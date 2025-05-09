@@ -1,11 +1,10 @@
 import { BellOutlined, ContainerOutlined, UserOutlined } from '@ant-design/icons'
 import { Avatar, Menu } from 'antd'
-import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { AuthContext } from '~/context/AuthContext'
 import Header from '~/components/Header/Header'
 import Footer from '~/components/Footer/Footer'
+import useAuthStore from '~/store/useAuthStore'
 
 function User({ children }) {
   const items = [
@@ -41,7 +40,7 @@ function User({ children }) {
     }
   ]
 
-  const { currentUser } = useContext(AuthContext)
+  const { currentUser } = useAuthStore()
   const navigate = useNavigate()
 
   return (

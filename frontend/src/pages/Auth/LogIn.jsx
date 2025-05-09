@@ -1,32 +1,18 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, Spin } from 'antd'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Navigate, NavLink, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import authAPI from '~/api/authAPI'
-import { AuthContext } from '~/context/AuthContext'
 import ModalForgotPassword from './ModalForgotPassword'
+import useAuthStore from '~/store/useAuthStore'
 
 function LogIn() {
-  const { updateUser, currentUser } = useContext(AuthContext)
+  const { logIn, isLoggingIn, currentUser } = useAuthStore()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isLoading, setisLoading] = useState(false)
-
   const navigate = useNavigate()
 
-  const onFinish = async (data) => {
-    setisLoading(true)
-
-    try {
-      const res = await authAPI.logIn(data)
-      updateUser(res)
-      toast.success('Đăng nhập thành công !')
-      navigate('/')
-    } catch (error) {
-      toast.error(error.response.data.message)
-    } finally {
-      setisLoading(false)
-    }
+  const onFinish = (data) => {
+    logIn(data)
+    navigate('/')
   }
 
   if (currentUser) {
@@ -78,7 +64,7 @@ function LogIn() {
               </Form.Item>
 
               <Form.Item className='text-center'>
-                {isLoading ? (
+                {isLoggingIn ? (
                   <Button disabled className='login-form-button px-6 bg-red-600 text-white'>
                     <Spin size='small' />
                     Đăng nhập

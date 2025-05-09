@@ -9,9 +9,10 @@ import { CommentOutlined } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom'
 import reviewAPI from '~/api/reviewAPI'
 import { toast } from 'react-toastify'
+import useAuthStore from '~/store/useAuthStore'
 
 function Review({ book, setBook }) {
-  const { currentUser } = useContext(AuthContext)
+  const { currentUser } = useAuthStore()
 
   const [listReviews, setListReviews] = useState([])
   const [contentReview, setContentReview] = useState('')

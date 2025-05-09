@@ -4,27 +4,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { NavLink, useNavigate } from 'react-router-dom'
 
 import { Button, Dropdown } from 'antd'
-import authAPI from '~/api/authAPI'
-import { useContext } from 'react'
-import { AuthContext } from '~/context/AuthContext'
-import { toast } from 'react-toastify'
+import useAuthStore from '~/store/useAuthStore'
 
 function Profile() {
   const navigate = useNavigate()
-  const { currentUser, updateUser } = useContext(AuthContext)
+  const { currentUser, logOut } = useAuthStore()
+  console.log(currentUser)
 
   const handleLogout = async () => {
-    if (currentUser) {
-      try {
-        await authAPI.logOut()
-        updateUser(null)
-        navigate('/')
-        toast.success('Đăng xuất thành công')
-      } catch (error) {
-        console.log(error)
-      }
-    }
+    logOut()
+    navigate('/')
   }
+
   const items = currentUser
     ? [
         {

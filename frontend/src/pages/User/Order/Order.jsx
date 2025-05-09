@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import cartAPI from '~/api/cartAPI'
-import { AuthContext } from '~/context/AuthContext'
 import { Badge, ConfigProvider, Tabs } from 'antd'
 import ListOrder from './ListOrder/ListOrder'
+import useAuthStore from '~/store/useAuthStore'
 
 function Order() {
-  const { currentUser } = useContext(AuthContext)
+  const { currentUser } = useAuthStore()
   const [listOrderByStatus, setListOrderByStatus] = useState({})
 
   const listItems = [

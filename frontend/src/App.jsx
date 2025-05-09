@@ -19,6 +19,7 @@ import AdminOrder from './pages/Admin/Order'
 import FilterPage from '~/pages/Filter'
 import { useEffect } from 'react'
 import PrivateLayout from '~/layout/PrivateLayout'
+import useAuthStore from '~/store/useAuthStore'
 
 export function ScrollToTop({ children }) {
   const { pathname } = useLocation()
@@ -31,6 +32,12 @@ export function ScrollToTop({ children }) {
 }
 
 function App() {
+  const { checkAuthUser } = useAuthStore()
+
+  useEffect(() => {
+    checkAuthUser()
+  }, [checkAuthUser])
+
   const router = createBrowserRouter([
     {
       path: '/',

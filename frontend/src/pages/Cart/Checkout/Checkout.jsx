@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import cartAPI from '~/api/cartAPI'
 import { AuthContext } from '~/context/AuthContext'
+import useAuthStore from '~/store/useAuthStore'
 import { formatPriceVND } from '~/utils/formatPriceVND'
 
 function Checkout() {
@@ -31,7 +32,9 @@ function Checkout() {
       }
     }
   }
-  const { currentUser, quantityCart, countQuantityCart } = useContext(AuthContext)
+
+  const { currentUser } = useAuthStore()
+  const { quantityCart, countQuantityCart } = useContext(AuthContext)
 
   const [cartItems, setCartItems] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)

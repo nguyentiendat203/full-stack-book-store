@@ -21,7 +21,7 @@ const userAPI = {
     const url = '/user/update'
     return axiosClient.put(url, data)
   },
-  updateMe: (userId, data) => {
+  updateMe: (data) => {
     const url = '/user/update-me'
     return axiosClient.put(url, data)
   },

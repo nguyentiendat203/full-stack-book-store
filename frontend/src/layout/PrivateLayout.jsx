@@ -1,10 +1,9 @@
-import { useContext } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
-import { AuthContext } from '~/context/AuthContext'
+import useAuthStore from '~/store/useAuthStore'
 
 function PrivateLayout() {
-  const { currentUser } = useContext(AuthContext)
+  const { currentUser } = useAuthStore()
   if (!currentUser) return <Navigate to='/login' />
   return <Outlet />
 }

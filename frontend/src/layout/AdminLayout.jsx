@@ -1,13 +1,12 @@
-import { useContext } from 'react'
 import { Navigate } from 'react-router-dom'
-
-import { AuthContext } from '~/context/AuthContext'
 import Footer from '~/pages/Admin/Footer'
 import Header from '~/pages/Admin/Header'
 import SideMenu from '~/pages/Admin/SideMenu'
+import useAuthStore from '~/store/useAuthStore'
 
 function AdminLayout({ children }) {
-  const { currentUser } = useContext(AuthContext)
+  const { currentUser } = useAuthStore()
+
   if (!currentUser) {
     return <Navigate to='/login' />
   } else {

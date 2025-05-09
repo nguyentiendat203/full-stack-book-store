@@ -5,11 +5,11 @@ const cartAPI = {
     const url = '/user/add-to-cart'
     return axiosClient.post(url, reqBody)
   },
-  cartQuantity: (userId) => {
-    const url = `/user/cart-quantity/${userId}`
+  cartQuantity: () => {
+    const url = '/user/cart-quantity'
     return axiosClient.get(url)
   },
-  getMyCart: (userId) => {
+  getMyCart: () => {
     const url = '/user/my-cart'
     return axiosClient.get(url)
   },
