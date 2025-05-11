@@ -40,6 +40,7 @@ module.exports = {
     'comma-spacing': 1,
     'arrow-spacing': 1,
     'no-extra-semi': 1,
-    'no-unused-labels': 1
+    'no-unused-labels': 1,
+    'no-const-assign': 1
   }
 }

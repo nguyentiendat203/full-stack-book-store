@@ -1,13 +1,11 @@
 import { Button, Input, Radio, Upload } from 'antd'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-import { AuthContext } from '~/context/AuthContext'
 import _ from 'lodash'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamation } from '@fortawesome/free-solid-svg-icons'
-import userAPI from '~/api/userAPI'
 import handleUploadImage from '~/utils/handleUploadImage'
 import useAuthStore from '~/store/useAuthStore'
 
@@ -30,7 +28,6 @@ function Profile() {
   }
 
   const { currentUser, updateProfile } = useAuthStore()
-  const { updateUser } = useContext(AuthContext)
 
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState()

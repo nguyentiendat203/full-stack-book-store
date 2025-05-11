@@ -2,7 +2,7 @@ import express from 'express'
 import { authController } from '~/controllers/authController'
 import { userController } from '~/controllers/userController'
 import { checkUserPermission } from '~/middlewares/checkUserPermission'
-import { verifyToken } from '~/middlewares/verifyToken'
+import { protectRoute } from '~/middlewares/protectRoute'
 import { authValidation } from '~/validations/authValidation'
 
 const router = express.Router()
@@ -13,14 +13,15 @@ router.post('/logout', authController.logout)
 router.post('/recommend', userController.recommendSystem)
 router.post('/send-mail', userController.sendEmail)
 router.post('/change-password', authValidation.changePassword, userController.changePassword)
+router.post('/refresh-token', authController.refreshTokenAPI)
 
-router.use(verifyToken)
+router.use(protectRoute)
 router.put('/update-password', userController.updatePassword)
 router.put('/update-me', authValidation.updateUser, userController.updateMe)
 // --------------------ADD TO CART--------------
 router.post('/add-to-cart', userController.addCartUser)
-router.get('/cart-quantity/:userId', userController.countQuantityCart)
-router.post('/update-cart-quantity', userController.updateCartQuantity)
+router.get('/cart-quantity', userController.countQuantityCart)
+router.put('/update-cart-quantity', userController.updateCartQuantity)
 router.delete('/delete-cart-item/:bookId', userController.deleteCartItem)
 router.get('/my-cart', userController.getMyCart)
 router.post('/order', userController.orderCart)

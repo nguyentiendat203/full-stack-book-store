@@ -1,11 +1,11 @@
 import express from 'express'
 import { roleController } from '~/controllers/roleController'
 import { checkUserPermission } from '~/middlewares/checkUserPermission'
-import { verifyToken } from '~/middlewares/verifyToken'
+import { protectRoute } from '~/middlewares/protectRoute'
 
 const router = express.Router()
 
-router.use(verifyToken, checkUserPermission)
+router.use(protectRoute, checkUserPermission)
 router.post('/create', roleController.createRoles)
 router.get('/read', roleController.getAllRoles)
 router.delete('/delete', roleController.deleteRole)

@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, useLocation } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider, useLocation } from 'react-router-dom'
 import DefaultLayout from './layout/DefaultLayout'
 import LogIn from './pages/Auth/LogIn'
 import Home from './pages/Home/Home'
@@ -32,7 +32,7 @@ export function ScrollToTop({ children }) {
 }
 
 function App() {
-  const { checkAuthUser } = useAuthStore()
+  const { checkAuthUser, currentUser } = useAuthStore()
 
   useEffect(() => {
     checkAuthUser()
@@ -54,15 +54,15 @@ function App() {
         { path: 'chi-tiet-sach/:slug/:id', element: <BookDetail /> },
         { path: 'filter', element: <FilterPage /> },
         { path: 'filter/:parentId', element: <FilterPage /> },
-        { path: 'filter/:parentId/:id', element: <FilterPage /> }
+        { path: 'filter/:parentId/:id', element: <FilterPage /> },
+        { path: 'my-cart', element: currentUser ? <Cart /> : <Navigate to='/login' /> },
+        { path: 'checkout', element: currentUser ? <Checkout /> : <Navigate to='/login' /> }
       ]
     },
     {
       path: '/',
       element: <PrivateLayout />,
       children: [
-        { path: 'my-cart', element: <Cart /> },
-        { path: 'checkout', element: <Checkout /> },
         {
           path: 'user/order',
           element: (

@@ -9,6 +9,10 @@ const authAPI = {
     const url = '/user/signup'
     return axiosClient.post(url, data)
   },
+  refreshToken: () => {
+    const url = '/user/refresh-token'
+    return axiosClient.post(url)
+  },
   logOut: () => {
     const url = '/user/logout'
     return axiosClient.post(url)

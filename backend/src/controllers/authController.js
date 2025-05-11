@@ -1,6 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
 import { authService } from '~/services/authService'
-import { createSignToken } from '~/utils/createSignToken'
 
 const signup = async (req, res, next) => {
   try {
@@ -13,15 +12,25 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    const user = await authService.login(req.body)
-    createSignToken(user, StatusCodes.OK, res)
+    const user = await authService.login(req.body, res)
+    return res.status(StatusCodes.OK).json(user)
   } catch (error) {
     next(error)
   }
 }
 
-const logout = async (req, res, next) => {
-  res.clearCookie('token').status(StatusCodes.OK).json({ status: 'Logout Successful' })
+const logout = async (req, res) => {
+  res.clearCookie('accessToken')
+  res.clearCookie('refreshToken')
+  return res.status(StatusCodes.OK).json({ status: 'Logout Successful' })
 }
 
-export const authController = { signup, login, logout }
+const refreshTokenAPI = async (req, res, next) => {
+  try {
+    return authService.refreshTokenAPI(req.cookies.refreshToken, res)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const authController = { signup, login, logout, refreshTokenAPI }

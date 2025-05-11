@@ -94,7 +94,7 @@ const orderCart = async (req, res, next) => {
 
 const countQuantityCart = async (req, res, next) => {
   try {
-    const quantityCart = await userService.countQuantityCart(req.params.userId)
+    const quantityCart = await userService.countQuantityCart(req.user.id)
     return res.status(StatusCodes.OK).json(quantityCart)
   } catch (error) {
     next(error)
