@@ -2,6 +2,7 @@ import express from 'express'
 import { authController } from '~/controllers/authController'
 import { userController } from '~/controllers/userController'
 import { checkUserPermission } from '~/middlewares/checkUserPermission'
+import { multerUploadMiddleware } from '~/middlewares/multerUploadMiddleware'
 import { protectRoute } from '~/middlewares/protectRoute'
 import { authValidation } from '~/validations/authValidation'
 
@@ -17,7 +18,7 @@ router.post('/refresh-token', authController.refreshTokenAPI)
 
 router.use(protectRoute)
 router.put('/update-password', userController.updatePassword)
-router.put('/update-me', authValidation.updateUser, userController.updateMe)
+router.put('/update-me', multerUploadMiddleware.upload.single('avatar'), authValidation.updateUser, userController.updateMe)
 // --------------------ADD TO CART--------------
 router.post('/add-to-cart', userController.addCartUser)
 router.get('/cart-quantity', userController.countQuantityCart)

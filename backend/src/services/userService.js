@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { mailOptions, transporter } from '~/mail'
 import db from '~/models'
+import { cloudinaryProvider } from '~/providers/cloudinaryProvider'
 import ApiError from '~/utils/ApiError'
 import { recommendItems } from '~/utils/recommendSystem'
 
@@ -125,12 +126,18 @@ const updatePassword = async (reqBody, currentUser) => {
   return user.dataValues
 }
 
-const updateMe = async (userId, reqBody) => {
+const updateMe = async (userId, reqBody, reqFile) => {
   try {
-    return await db.User.update(reqBody, {
-      where: {
-        id: userId
-      }
+    let result = null
+    if (reqFile) result = await cloudinaryProvider.uploadSteamImage(reqFile.buffer)
+    await db.User.update(reqFile ? { avatar: result?.secure_url } : reqBody, {
+      where: { id: userId }
+    })
+
+    return await db.User.findOne({
+      where: { id: userId },
+      attributes: { exclude: ['password', 'createdAt', 'updatedAt', 'GroupId'] },
+      include: { model: db.Group }
     })
   } catch (error) {
     throw error

@@ -1,35 +1,16 @@
-import { Button, Input, Radio, Upload } from 'antd'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
+import { Button, Input, Radio } from 'antd'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 import _ from 'lodash'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExclamation } from '@fortawesome/free-solid-svg-icons'
-import handleUploadImage from '~/utils/handleUploadImage'
 import useAuthStore from '~/store/useAuthStore'
+import { UploadImage } from '~/components/UploadImage'
 
 function Profile() {
-  const getBase64 = (img, callback) => {
-    const reader = new FileReader()
-    reader.addEventListener('load', () => callback(reader.result))
-    reader.readAsDataURL(img)
-  }
-  const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
-    if (!isJpgOrPng) {
-      toast.error('You can only upload JPG/PNG file!')
-    }
-    const isLt2M = file.size / 1024 / 1024 < 2
-    if (!isLt2M) {
-      toast.error('Image must smaller than 2MB!')
-    }
-    return isJpgOrPng && isLt2M
-  }
-
   const { currentUser, updateProfile } = useAuthStore()
 
-  const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState()
 
   const dataProfileDefault = {
@@ -49,38 +30,6 @@ function Profile() {
     phone: true
   }
   const [validInput, setValidInput] = useState(defaultValidInput)
-
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: 'none'
-      }}
-      type='button'
-    >
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div
-        style={{
-          marginTop: 8
-        }}
-      >
-        Avatar
-      </div>
-    </button>
-  )
-
-  const handleChange = (info) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true)
-      return
-    }
-    getBase64(info.file.originFileObj, async (url) => {
-      setLoading(false)
-      setImageUrl(url)
-      const secure_url = await handleUploadImage(url)
-      setDataProfile({ ...dataProfile, avatar: secure_url })
-    })
-  }
 
   const handleOnchangeInput = (name, value) => {
     let _validInput = _.cloneDeep(validInput)
@@ -164,44 +113,18 @@ function Profile() {
                 </Radio.Group>
               </div>
             </div>
+            <p className='mt-10'>
+              <Button disabled={isFormValid()} danger type='primary' className='p-4 !bg-red-600' onClick={handleSave}>
+                LƯU
+              </Button>
+            </p>
           </div>
           <div className='flex-1'>
             <div className='text-center'>
-              <Upload
-                name='avatar'
-                listType='picture-circle'
-                className='avatar-uploader'
-                showUploadList={false}
-                action='https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload'
-                beforeUpload={beforeUpload}
-                onChange={handleChange}
-              >
-                {imageUrl ? (
-                  <img
-                    src={imageUrl}
-                    alt='avatar'
-                    style={{
-                      height: '100%',
-                      width: '100%',
-                      objectFit: 'cover',
-                      borderRadius: '50px'
-                    }}
-                  />
-                ) : (
-                  uploadButton
-                )}
-              </Upload>
-              <p className='text-sm text-gray-500 mt-4'>
-                Dụng lượng ảnh tối đa 2 MB <br /> Định dạng:.JPEG, .PNG
-              </p>
+              <UploadImage />
             </div>
           </div>
         </div>
-        <p className='pl-24'>
-          <Button disabled={isFormValid()} danger type='primary' className='p-4 !bg-red-600' onClick={handleSave}>
-            LƯU
-          </Button>
-        </p>
       </div>
     </>
   )

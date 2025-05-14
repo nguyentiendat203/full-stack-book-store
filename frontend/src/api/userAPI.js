@@ -21,8 +21,15 @@ const userAPI = {
     const url = '/user/update'
     return axiosClient.put(url, data)
   },
-  updateMe: (data) => {
+  updateMe: (data, formData) => {
     const url = '/user/update-me'
+    if (formData) {
+      return axiosClient.put(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data' // ⚠️ override lại
+        }
+      })
+    }
     return axiosClient.put(url, data)
   },
   getAllOrders: () => {

@@ -58,8 +58,8 @@ const updatePassword = async (req, res, next) => {
 
 const updateMe = async (req, res, next) => {
   try {
-    await userService.updateMe(req.user.id, req.body)
-    return res.status(StatusCodes.OK).json({ message: 'Successfully' })
+    const data = await userService.updateMe(req.user.id, req.body, req.file)
+    return res.status(StatusCodes.OK).json(data)
   } catch (error) {
     next(error)
   }

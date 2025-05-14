@@ -39,11 +39,11 @@ const useAuthStore = create((set) => ({
     toast.success('Đăng xuất thành công')
   },
 
-  updateProfile: async (data) => {
-    await userAPI.updateMe(data)
-    set({ currentUser: data })
-    localStorage.setItem('user', JSON.stringify(data))
+  updateProfile: async (data, formData) => {
+    const currentUser = await userAPI.updateMe(data, formData)
     toast.success('Cập nhật thông tin thành công')
+    set({ currentUser })
+    localStorage.setItem('user', JSON.stringify(currentUser))
   }
 }))
 
