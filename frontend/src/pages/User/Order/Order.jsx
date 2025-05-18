@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import cartAPI from '~/api/cartAPI'
+import orderAPI from '~/api/orderAPI'
 import { Badge, ConfigProvider, Tabs } from 'antd'
 import ListOrder from './ListOrder/ListOrder'
 import useAuthStore from '~/store/useAuthStore'
@@ -28,7 +28,7 @@ function Order() {
 
   const fetchDataListOrder = async () => {
     try {
-      const res = await cartAPI.getMyOrder(currentUser.id)
+      const res = await orderAPI.getMyOrder(currentUser.id)
       setListOrderByStatus(categorizeOrders(res))
     } catch (error) {
       toast(error.response?.data?.message)
@@ -55,7 +55,7 @@ function Order() {
 
   const onChange = async (key) => {
     try {
-      const res = await cartAPI.getMyOrderByStatus(key)
+      const res = await orderAPI.getMyOrderByStatus(key)
       setListOrderByStatus((prev) => ({ ...prev, [key]: res }))
     } catch (error) {
       toast(error.response?.data?.message)

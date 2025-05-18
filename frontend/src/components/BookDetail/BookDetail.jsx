@@ -31,7 +31,7 @@ function BookDetail() {
       try {
         const res = await bookAPI.getBook(id)
         setBook(res)
-        const resRecommend = await cartAPI.getRecommend(currentUser?.id)
+        const resRecommend = await bookAPI.getRecommend(currentUser?.id)
         const newResRecommend = []
         await Promise.all(
           resRecommend.map(async (id) => {
@@ -52,7 +52,7 @@ function BookDetail() {
       if (!currentUser) {
         toast.info('Bạn cần phải đăng nhập')
       }
-      await cartAPI.addToCart(currentUser.id, { bookId: book.id, quantity })
+      await cartAPI.addToCart({ bookId: book.id, quantity })
       await countQuantityCart(currentUser.id)
       toast.success('Thêm vào giỏ hàng thành công')
     } catch (error) {

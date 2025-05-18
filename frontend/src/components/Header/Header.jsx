@@ -9,16 +9,18 @@ import { NavLink } from 'react-router-dom'
 import Tippy from '@tippyjs/react/headless'
 import { AppstoreOutlined, RiseOutlined, SettingOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
-import cartAPI from '~/api/cartAPI'
 import bookAPI from '~/api/bookAPI'
 import { toast } from 'react-toastify'
 import useDebounce from '~/hooks/useDebounce'
 import { Empty } from 'antd'
 import Category from '~/components/Header/DropDowns/Category/Category'
 import useAuthStore from '~/store/useAuthStore'
+import useCartStore from '~/store/useCartStore'
 
 function Header() {
   const { currentUser } = useAuthStore()
+  const { countQuantityCart } = useCartStore()
+
   const [listBooksSearch, setListBooksSearch] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [showResult, setShowResult] = useState(false)
@@ -27,7 +29,7 @@ function Header() {
 
   const fetchDataRecommendBook = async () => {
     try {
-      const resRecommend = await cartAPI.getRecommend(currentUser?.id)
+      const resRecommend = await bookAPI.getRecommend(currentUser?.id)
       const newResRecommend = []
       await Promise.all(
         resRecommend.map(async (id) => {
@@ -54,6 +56,7 @@ function Header() {
 
   useEffect(() => {
     fetchDataRecommendBook()
+    countQuantityCart()
   }, [])
 
   useEffect(() => {

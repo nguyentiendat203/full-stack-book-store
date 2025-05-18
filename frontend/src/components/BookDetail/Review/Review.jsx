@@ -1,10 +1,9 @@
 import { Button, Progress, Rate } from 'antd'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from 'antd'
 import { format } from 'date-fns'
 const { TextArea } = Input
 
-import { AuthContext } from '~/context/AuthContext'
 import { CommentOutlined } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom'
 import reviewAPI from '~/api/reviewAPI'

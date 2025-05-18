@@ -4,13 +4,13 @@ import { Button } from 'antd'
 import { format } from 'date-fns'
 import { NavLink } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import userAPI from '~/api/userAPI'
+import orderAPI from '~/api/orderAPI'
 import { formatPriceVND } from '~/utils/formatPriceVND'
 
 function ListOrderItem({ item, statusMessage, fetchDataListOrder, onHideBtnConfirmOrder }) {
   const confirmOrder = async (status, orderId) => {
     try {
-      await userAPI.updateStatusOrder({ status, id: orderId })
+      await orderAPI.updateStatusOrder({ status, id: orderId })
       fetchDataListOrder()
       toast.success('Xác nhận thành công')
     } catch (error) {

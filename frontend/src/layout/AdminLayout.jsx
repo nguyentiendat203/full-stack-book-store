@@ -1,10 +1,10 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import Footer from '~/pages/Admin/Footer'
 import Header from '~/pages/Admin/Header'
 import SideMenu from '~/pages/Admin/SideMenu'
 import useAuthStore from '~/store/useAuthStore'
 
-function AdminLayout({ children }) {
+function AdminLayout() {
   const { currentUser } = useAuthStore()
 
   if (!currentUser) {
@@ -19,7 +19,7 @@ function AdminLayout({ children }) {
             </div>
             <div className='h-full flex-1 bg-gray-200 p-2'>
               <Header />
-              {children}
+              <Outlet />
             </div>
           </div>
           <Footer />

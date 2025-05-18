@@ -1,10 +1,11 @@
 import { Button, Form, Input } from 'antd'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import cartAPI from '~/api/cartAPI'
-import { AuthContext } from '~/context/AuthContext'
+import orderAPI from '~/api/orderAPI'
 import useAuthStore from '~/store/useAuthStore'
+import useCartStore from '~/store/useCartStore'
 import { formatPriceVND } from '~/utils/formatPriceVND'
 
 function Checkout() {
@@ -34,7 +35,7 @@ function Checkout() {
   }
 
   const { currentUser } = useAuthStore()
-  const { quantityCart, countQuantityCart } = useContext(AuthContext)
+  const { quantityCart, countQuantityCart } = useCartStore()
 
   const [cartItems, setCartItems] = useState([])
   const [totalPrice, setTotalPrice] = useState(0)
@@ -55,9 +56,9 @@ function Checkout() {
 
   const onFinish = async (values) => {
     try {
-      const res = await cartAPI.orderCart({ ...values, status: 1 })
+      const res = await orderAPI.orderCart({ ...values, status: 1 })
       toast.success(res.message)
-      countQuantityCart(currentUser.id)
+      countQuantityCart()
       navigate('/')
     } catch (error) {
       console.log(error)

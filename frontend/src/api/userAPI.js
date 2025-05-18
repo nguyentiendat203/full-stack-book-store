@@ -32,14 +32,6 @@ const userAPI = {
     }
     return axiosClient.put(url, data)
   },
-  getAllOrders: () => {
-    const url = '/user/orders'
-    return axiosClient.get(url)
-  },
-  updateStatusOrder: (reqBody) => {
-    const url = '/user/update-status'
-    return axiosClient.put(url, reqBody)
-  },
   sendEmail: (reqBody) => {
     const url = '/user/send-mail'
     return axiosClient.post(url, reqBody)

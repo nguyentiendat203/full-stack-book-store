@@ -83,47 +83,27 @@ function App() {
     },
     {
       path: '/',
-      element: <PrivateLayout />,
+      element: <AdminLayout />,
       children: [
         {
           path: 'dash-board/book',
-          element: (
-            <AdminLayout>
-              <Book />
-            </AdminLayout>
-          )
+          element: <Book />
         },
         {
           path: 'dash-board/user',
-          element: (
-            <AdminLayout>
-              <ListUser />
-            </AdminLayout>
-          )
+          element: <ListUser />
         },
         {
           path: 'dash-board/order',
-          element: (
-            <AdminLayout>
-              <AdminOrder />
-            </AdminLayout>
-          )
+          element: <AdminOrder />
         },
         {
           path: 'dash-board/role',
-          element: (
-            <AdminLayout>
-              <Role />
-            </AdminLayout>
-          )
+          element: <Role />
         },
         {
           path: 'dash-board/permission',
-          element: (
-            <AdminLayout>
-              <GroupRole />
-            </AdminLayout>
-          )
+          element: <GroupRole />
         }
       ]
     }

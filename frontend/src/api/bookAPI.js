@@ -24,6 +24,10 @@ const bookAPI = {
   updateBook: (data) => {
     const url = '/book/update'
     return axiosClient.put(url, data)
+  },
+  getRecommend: () => {
+    const url = '/book/recommend'
+    return axiosClient.post(url, { numNeighbors: 3, numRecommendations: 10 })
   }
 }
 export default bookAPI

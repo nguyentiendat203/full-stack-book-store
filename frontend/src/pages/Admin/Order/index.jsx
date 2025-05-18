@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { format } from 'date-fns'
 
-import userAPI from '~/api/userAPI'
 import { formatPriceVND } from '~/utils/formatPriceVND'
 import ListOrder from '~/pages/User/Order/ListOrder/ListOrder'
+import orderAPI from '~/api/orderAPI'
 
 function Order() {
   const items = [
@@ -153,7 +153,7 @@ function Order() {
 
   const updateStatusOrder = async (status, orderId) => {
     try {
-      await userAPI.updateStatusOrder({ status, id: orderId })
+      await orderAPI.updateStatusOrder({ status, id: orderId })
       fetchAllOrders()
     } catch (error) {
       toast.error(error.response.data.message)
@@ -176,7 +176,7 @@ function Order() {
 
   const fetchAllOrders = async () => {
     try {
-      const res = await userAPI.getAllOrders()
+      const res = await orderAPI.getAllOrders()
       setDataSource(res)
     } catch (error) {
       toast.error(error.response.data.message)
