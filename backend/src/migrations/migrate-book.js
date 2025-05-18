@@ -23,13 +23,13 @@ module.exports = {
       },
       price: {
         allowNull: false,
-        type: Sequelize.DOUBLE
+        type: Sequelize.DECIMAL(10, 2)
       },
       discount: {
         type: Sequelize.INTEGER
       },
       discountedPrice: {
-        type: Sequelize.DOUBLE
+        type: Sequelize.DECIMAL(10, 2)
       },
       stock: {
         allowNull: false,
@@ -60,7 +60,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       ratingsAverage: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.DECIMAL(10, 2),
         defaultValue: 3.5
       },
       createdAt: {

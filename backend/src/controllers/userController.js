@@ -65,114 +65,6 @@ const updateMe = async (req, res, next) => {
   }
 }
 
-const addCartUser = async (req, res, next) => {
-  try {
-    const cart = await userService.addCartUser(req.user.id, req.body)
-    return res.status(StatusCodes.OK).json(cart)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const getMyCart = async (req, res, next) => {
-  try {
-    const myCart = await userService.getMyCart(req.user.id)
-    return res.status(StatusCodes.OK).json(myCart)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const orderCart = async (req, res, next) => {
-  try {
-    const myOrder = await userService.orderCart(req.user.id, req.body)
-    return res.status(StatusCodes.OK).json(myOrder)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const countQuantityCart = async (req, res, next) => {
-  try {
-    const quantityCart = await userService.countQuantityCart(req.user.id)
-    return res.status(StatusCodes.OK).json(quantityCart)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const updateCartQuantity = async (req, res, next) => {
-  try {
-    const cart = await userService.updateCartQuantity(req.user.id, req.body)
-    return res.status(StatusCodes.OK).json(cart)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const deleteCartItem = async (req, res, next) => {
-  try {
-    const cart = await userService.deleteCartItem(req.user.id, req.params.bookId)
-    return res.status(StatusCodes.OK).json(cart)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const getOrder = async (req, res, next) => {
-  try {
-    const orders = await userService.getOrder(req.user.id)
-    return res.status(StatusCodes.OK).json(orders)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const getOrderStatus = async (req, res, next) => {
-  try {
-    const orders = await userService.getOrderStatus(req.user.id, req.params.status)
-    return res.status(StatusCodes.OK).json(orders)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const getPurchases = async (req, res, next) => {
-  try {
-    const purchases = await userService.getPurchases()
-    return res.status(StatusCodes.OK).json(purchases)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const recommendSystem = async (req, res, next) => {
-  try {
-    const purchases = await userService.recommendSystem(req.user?.id || 0, req.body)
-    return res.status(StatusCodes.OK).json(purchases)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const getAllOrder = async (req, res, next) => {
-  try {
-    const allOrders = await userService.getAllOrder()
-    return res.status(StatusCodes.OK).json(allOrders)
-  } catch (error) {
-    next(error)
-  }
-}
-
-const updateStatusOrder = async (req, res, next) => {
-  try {
-    const order = await userService.updateStatusOrder(req.body)
-    return res.status(StatusCodes.OK).json(order)
-  } catch (error) {
-    next(error)
-  }
-}
-
 const sendEmail = async (req, res, next) => {
   try {
     const message = await userService.sendEmail(req.body.email)
@@ -199,18 +91,6 @@ export const userController = {
   deleteUser,
   updatePassword,
   updateMe,
-  addCartUser,
-  getMyCart,
-  orderCart,
-  countQuantityCart,
-  updateCartQuantity,
-  deleteCartItem,
-  getOrder,
-  getOrderStatus,
-  getPurchases,
-  recommendSystem,
-  getAllOrder,
-  updateStatusOrder,
   sendEmail,
   changePassword
 }

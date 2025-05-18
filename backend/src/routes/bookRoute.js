@@ -4,8 +4,11 @@ import { checkUserPermission } from '~/middlewares/checkUserPermission'
 import { protectRoute } from '~/middlewares/protectRoute'
 
 const router = express.Router()
+
 router.get('/read', bookController.getAllBook)
 router.get('/:id', bookController.getBook)
+router.post('/recommend', bookController.recommendSystem)
+
 router.use(protectRoute, checkUserPermission)
 router.post('/create', bookController.createBook)
 router.put('/update', bookController.updateBook)

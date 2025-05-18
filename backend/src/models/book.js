@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Book.belongsToMany(models.Cart, { through: 'Book_Cart' })
-      Book.belongsToMany(models.Order, { through: 'Book_Order' })
-      Book.belongsTo(models.Supplier)
-      Book.belongsTo(models.Category)
+      Book.belongsToMany(models.Cart, { through: 'Book_Cart', foreignKey: 'bookId', otherKey: 'cartId' })
+      Book.belongsToMany(models.Order, { through: 'Book_Order', foreignKey: 'bookId', otherKey: 'orderId' })
+      Book.belongsTo(models.Supplier, { foreignKey: 'supplierId' })
+      Book.belongsTo(models.Category, { foreignKey: 'categoryId' })
       Book.hasMany(models.Review, { foreignKey: 'bookId' })
     }
   }
@@ -27,10 +27,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING
       },
       price: {
-        type: DataTypes.DOUBLE
+        type: DataTypes.DECIMAL(10, 2)
       },
       discount: DataTypes.INTEGER,
-      discountedPrice: DataTypes.DOUBLE,
+      discountedPrice: DataTypes.DECIMAL(10, 2),
       stock: {
         type: DataTypes.INTEGER
       },
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0
       },
       ratingsAverage: {
-        type: DataTypes.DOUBLE,
+        type: DataTypes.DECIMAL(10, 2),
         defaultValue: 3.5
       }
     },

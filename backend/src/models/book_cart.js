@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Book_Cart.belongsTo(models.Book, { foreignKey: 'bookId' })
+      Book_Cart.belongsTo(models.Cart, { foreignKey: 'cartId' })
     }
   }
   Book_Cart.init(
@@ -24,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0
       },
       unitPrice: {
-        type: DataTypes.DOUBLE
+        type: DataTypes.DECIMAL(10, 2)
       }
     },
     {

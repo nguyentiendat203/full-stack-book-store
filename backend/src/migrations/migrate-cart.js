@@ -18,7 +18,7 @@ module.exports = {
         defaultValue: 0
       },
       totalCartPrice: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.DECIMAL(10, 2),
         defaultValue: 0
       },
       createdAt: {

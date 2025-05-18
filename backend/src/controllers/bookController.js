@@ -1,4 +1,5 @@
 import { StatusCodes } from 'http-status-codes'
+import db from '~/models'
 import { bookService } from '~/services/bookService'
 
 const createBook = async (req, res, next) => {
@@ -45,4 +46,13 @@ const deleteBook = async (req, res, next) => {
   }
 }
 
-export const bookController = { createBook, getAllBook, getBook, updateBook, deleteBook }
+const recommendSystem = async (req, res, next) => {
+  try {
+    const purchases = await bookService.recommendSystem(req.user?.id || 0, req.body)
+    return res.status(StatusCodes.OK).json(purchases)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const bookController = { recommendSystem, createBook, getAllBook, getBook, updateBook, deleteBook }

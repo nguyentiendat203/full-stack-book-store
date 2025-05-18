@@ -26,7 +26,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       totalOrderPrice: {
-        type: Sequelize.DOUBLE,
+        type: Sequelize.DECIMAL(10, 2),
         defaultValue: 0
       },
       status: {

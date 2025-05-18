@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       quantity: DataTypes.INTEGER,
       unitPrice: {
-        type: DataTypes.DOUBLE
+        type: DataTypes.DECIMAL(10, 2)
       }
     },
     {

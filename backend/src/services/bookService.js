@@ -2,6 +2,7 @@ import { Op } from 'sequelize'
 import db from '~/models'
 import slugify from '~/utils/slugify'
 import getOrSetCache from '~/utils/getOrSetCache'
+import { recommendItems } from '~/utils/recommendSystem'
 
 const responseBookData = async (limit, condition) => {
   const { count, rows } = await db.Book.findAndCountAll({ ...condition })
@@ -13,7 +14,7 @@ const createNew = async (reqBody) => {
     const newBook = {
       ...reqBody,
       slug: slugify(reqBody.name),
-      discountedPrice: reqBody.price - (reqBody.price * reqBody.discount) / 100,
+      discountedPrice: reqBody.price * (1 - reqBody.discount / 100),
       categoryId: reqBody.idSubCate
     }
 
@@ -158,4 +159,29 @@ const deleteDetail = async (bookId) => {
   }
 }
 
-export const bookService = { createNew, getAll, getDetail, updateDetail, deleteDetail }
+const recommendSystem = async (userId, reqBody) => {
+  try {
+    const { numNeighbors, numRecommendations } = reqBody
+    const orders = await db.Order.findAll({
+      include: [
+        { model: db.User, attributes: ['id'] },
+        { model: db.Book, attributes: ['id'] }
+      ]
+    })
+
+    const purchases = []
+    orders.forEach((order) => {
+      const userId = order.userId
+      order.Books.map((item) => {
+        purchases.push({ user_id: userId, item_id: item.id })
+      })
+    })
+
+    const recommendations = recommendItems(purchases, userId, numNeighbors, numRecommendations)
+    return recommendations
+  } catch (error) {
+    throw error
+  }
+}
+
+export const bookService = { createNew, getAll, getDetail, updateDetail, deleteDetail, recommendSystem }
