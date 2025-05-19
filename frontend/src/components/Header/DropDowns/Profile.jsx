@@ -9,7 +9,6 @@ import useAuthStore from '~/store/useAuthStore'
 function Profile() {
   const navigate = useNavigate()
   const { currentUser, logOut } = useAuthStore()
-  console.log(currentUser)
 
   const handleLogout = async () => {
     logOut()
@@ -96,12 +95,10 @@ function Profile() {
         placement='bottomRight'
         trigger={['click']}
       >
-        <div className='mr-4'>
-          <button className='flex flex-col items-center text-gray-500'>
-            <span>
-              <FontAwesomeIcon icon={faUser} />
-            </span>
-            <span className='text-sm'>Tài khoản</span>
+        <div className='mr-2 md:mr-4'>
+          <button className='flex flex-col items-center text-white lg:text-gray-500'>
+            <FontAwesomeIcon className='size-6 md:size-5' icon={faUser} />
+            <span className='hidden md:inline-block text-sm'>Tài khoản</span>
           </button>
         </div>
       </Dropdown>

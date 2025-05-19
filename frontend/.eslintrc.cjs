@@ -8,7 +8,7 @@ module.exports = {
     //---React
     'react-refresh/only-export-components': 'warn',
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/exhaustive-deps': 'off',
     'react/prop-types': 0,
     'react/display-name': 0,
 
