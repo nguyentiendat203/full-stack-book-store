@@ -74,7 +74,7 @@ function Header() {
 
   return (
     <>
-      <header className='flex flex-col text-white'>
+      <header className='fixed top-0 left-0 w-full z-50 flex flex-col text-white transition-all duration-300 lg:static lg:shadow-none'>
         <div className='bg-red-600 flex justify-center p-2'>
           <NavLink to='/' className='lg:hidden'>
             <img src={fahasa} className='w-36' alt='none' />

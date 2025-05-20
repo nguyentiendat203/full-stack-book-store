@@ -1,7 +1,7 @@
-import { Pagination } from 'antd'
+import { Button, Pagination } from 'antd'
 import { CardBook } from '~/components/CardBook'
 
-function ListBook({ listBooks, setCurrentPage, totalRecords, currentLimit, noPaginate, title, iconTitle }) {
+function ListBook({ listBooks, setCurrentPage, totalRecords, currentLimit, noPaginate, title, iconTitle, setCurrentLimit }) {
   const handleChangePage = (e) => {
     setCurrentPage(e)
   }
@@ -11,7 +11,7 @@ function ListBook({ listBooks, setCurrentPage, totalRecords, currentLimit, noPag
         <span className='mr-2'>{iconTitle}</span>
         {title}
       </p>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 bg-white p-4 rounded-l-lg'>
+      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 bg-white md:p-4 rounded-t-lg'>
         {listBooks &&
           listBooks.map((book) => {
             return (
@@ -20,6 +20,18 @@ function ListBook({ listBooks, setCurrentPage, totalRecords, currentLimit, noPag
               </>
             )
           })}
+      </div>
+      <div className='flex items-center justify-center gap-2 bg-white p-4 rounded-b-lg'>
+        <Button
+          type='primary'
+          size='large'
+          className='bg-red-600 hover:!bg-red-700 text-white'
+          onClick={() => {
+            setCurrentPage((prev) => prev + 1)
+          }}
+        >
+          Xem thêm
+        </Button>
       </div>
       <div className='bg-white rounded-b-lg p-2'>{!noPaginate ? <Pagination align='end' total={totalRecords} pageSize={currentLimit} onChange={handleChangePage} /> : ''}</div>
     </>

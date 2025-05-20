@@ -13,15 +13,25 @@ const priceRanges = [
   { id: 4, title: '700,000đ - Trở Lên', min: 700000, max: 9999999 }
 ]
 
-const genres = ['Comedy', 'Fantasy', 'Romance', 'Horror', 'Mystery']
-
-export const Sidebar = ({ parentId, setCurrentPage }) => {
-  const { subcategories, setSubcategories, idSubCate, setIdSubCate, idCategory, setIdCategory, category, setCategory, setBooks, sortBy, itemsPerPage, setItemsPerPage } =
-    useBookStore()
+export const Sidebar = ({ parentId, setCurrentPage, minPrice, setMinPrice, maxPrice, setMaxPrice }) => {
+  const {
+    subcategories,
+    setSubcategories,
+    idSubCate,
+    setIdSubCate,
+    idCategory,
+    setIdCategory,
+    category,
+    setCategory,
+    setBooks,
+    sortBy,
+    itemsPerPage,
+    setItemsPerPage,
+    setTotalRecords
+  } = useBookStore()
 
   const [checkedInputId, setCheckedInputId] = useState()
-  const [minPrice, setMinPrice] = useState()
-  const [maxPrice, setMaxPrice] = useState()
+  console.log(checkedInputId)
   const [categories, setCategories] = useState([])
 
   const handleFilterPrice = (range) => {
@@ -42,15 +52,10 @@ export const Sidebar = ({ parentId, setCurrentPage }) => {
   }, [])
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        const response = await bookAPI.getAllBook(1, itemsPerPage, idCategory, idSubCate, sortBy, minPrice, maxPrice)
-        setBooks(response.books)
-      } catch (error) {
-        console.error('Error fetching products:', error)
-      }
-    }
-    fetchBooks()
+    bookAPI.getAllBook(1, itemsPerPage, idCategory, idSubCate, sortBy, minPrice, maxPrice).then((res) => {
+      setBooks(res.books)
+      setTotalRecords(res.totalRows)
+    })
   }, [minPrice, maxPrice])
 
   const fetchSubCategories = (id) => {
@@ -65,7 +70,7 @@ export const Sidebar = ({ parentId, setCurrentPage }) => {
   }
 
   return (
-    <div className='w-64 flex-shrink-0'>
+    <>
       <div className='bg-white rounded-lg shadow p-4 space-y-6'>
         <div>
           <h3 className='font-bold'>NHÓM SẢN PHẨM</h3>
@@ -152,6 +157,6 @@ export const Sidebar = ({ parentId, setCurrentPage }) => {
           </ul>
         </div>
       </div>
-    </div>
+    </>
   )
 }

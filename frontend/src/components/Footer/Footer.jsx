@@ -11,8 +11,8 @@ function Footer() {
   return (
     <>
       <div className='bg-white container w-11/12 md:w-10/12 2xl:w-8/12 mx-auto py-6 rounded-lg'>
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-          <div className='border-b-2 md:border-b-0 md:border-r-2 border-gray-200 pb-4 md:pb-0 pr-0 md:pr-4'>
+        <div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
+          <div className='border-b-2 md:border-b-0 lg:border-r-2 border-gray-200 pb-4 md:pb-0 pr-0 md:pr-4'>
             <img src={fahasa} alt='Fahasa' className='h-12 mb-4' />
             <p className='text-sm text-gray-700'>
               Lầu 5, 387-389 Hai Bà Trưng Quận 3 TP HCM
@@ -53,7 +53,7 @@ function Footer() {
               </a>
             </div>
           </div>
-          <div className='col-span-2 flex flex-col'>
+          <div className='lg:col-span-2 flex flex-col'>
             <div className='flex flex-col md:flex-row justify-between text-sm'>
               <div className='mb-4 md:mb-0'>
                 <h3 className='text-lg font-semibold mb-2 p-2'>DỊCH VỤ</h3>

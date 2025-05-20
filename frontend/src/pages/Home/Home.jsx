@@ -13,11 +13,12 @@ function Home() {
   const [listBooks, setListBooks] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalRecords, setTotalRecords] = useState(0)
+  const [currentLimit, setCurrentLimit] = useState(12)
 
   const fetchAllBook = async () => {
     try {
-      const res = await bookAPI.getAllBook(currentPage, 10)
-      setListBooks(res.books)
+      const res = await bookAPI.getAllBook(currentPage, currentLimit)
+      setListBooks((prev) => [...prev, ...res.books])
       setTotalRecords(res.totalRows)
     } catch (error) {
       toast.error(error.response.message)
@@ -30,8 +31,8 @@ function Home() {
   return (
     <>
       <div className='rounded-lg mb-4 grid grid-cols-1 md:grid-cols-3 gap-4'>
-        <div className='md:col-span-2 col-span-1'>
-          <div className='relative group h-48 md:h-full'>
+        <div className='md:col-span-3 lg:col-span-2 col-span-1'>
+          <div className='relative group h-48 md:h-80'>
             <Swiper
               modules={[Pagination, Autoplay, Navigation]}
               pagination={{ clickable: true }}
@@ -64,27 +65,30 @@ function Home() {
               {/* Custom navigation buttons */}
               <button
                 type='button'
-                className='hidden custom-swiper-prev absolute top-1/2 left-1 z-10 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full w-10 h-10 md:flex items-center justify-center shadow-md transition-all duration-200'
+                className='hidden custom-swiper-prev absolute top-1/2 left-1 z-10 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full w-10 h-10 lg:flex items-center justify-center shadow-md transition-all duration-200'
               >
                 <FontAwesomeIcon icon={faArrowLeft} />
               </button>
               <button
                 type='button'
-                className='hidden custom-swiper-next absolute top-1/2 right-1 z-10 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full w-10 h-10 md:flex items-center justify-center shadow-md transition-all duration-200'
+                className='hidden custom-swiper-next absolute top-1/2 right-1 z-10 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full w-10 h-10 lg:flex items-center justify-center shadow-md transition-all duration-200'
               >
                 <FontAwesomeIcon icon={faArrowRight} />
               </button>
             </Swiper>
           </div>
         </div>
-        <div className='hidden md:flex flex-row md:flex-col gap-3 h-full justify-between mt-3 md:mt-0'>
+        <div className='hidden lg:flex flex-col gap-2 h-full justify-between'>
           <img src='/banner2.webp' alt='Banner' className='h-20 md:h-36 object-cover rounded-lg w-1/2 md:w-full' />
           <img src='/banner3.webp' alt='Banner' className='h-20 md:h-36 object-cover rounded-lg w-1/2 md:w-full' />
         </div>
       </div>
       <ListBook
         listBooks={listBooks}
+        currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+        setCurrentLimit={setCurrentLimit}
+        noPaginate={true}
         totalRecords={totalRecords}
         currentLimit={10}
         iconTitle={<FontAwesomeIcon icon={faList} />}

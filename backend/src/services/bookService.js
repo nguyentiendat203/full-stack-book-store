@@ -85,7 +85,6 @@ const getAll = async (reqQuery) => {
     // === Parent Category filter ===
     if (parentCategory) {
       Object.assign(whereClause, priceFilter)
-
       const condition = {
         where: whereClause,
         include: [
@@ -102,7 +101,7 @@ const getAll = async (reqQuery) => {
 
       return await responseBookData(limit, condition)
     }
-
+    Object.assign(whereClause, priceFilter)
     const condition = {
       where: whereClause,
       include: [{ model: db.Category }],
@@ -112,11 +111,7 @@ const getAll = async (reqQuery) => {
       attributes: { exclude: ['createdAt', 'updatedAt'] }
     }
 
-    // return await responseBookData(limit, condition)
-    const { count, rows } = await getOrSetCache(`books-page:${page}`, async () => {
-      return await db.Book.findAndCountAll({ ...condition })
-    })
-    return { totalRows: count, totalPages: Math.ceil(count / limit), books: rows }
+    return await responseBookData(limit, condition)
   } catch (error) {
     throw error
   }
