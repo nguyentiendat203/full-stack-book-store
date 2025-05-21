@@ -20,7 +20,7 @@ axiosClient.interceptors.request.use(async (config) => {
   return config
 })
 
-const refreshTokenPromise = null
+let refreshTokenPromise = null
 
 axiosClient.interceptors.response.use(
   (response) => {

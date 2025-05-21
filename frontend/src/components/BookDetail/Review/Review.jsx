@@ -55,17 +55,17 @@ function Review({ book, setBook }) {
           <CommentOutlined className='mr-2' />
           Đánh giá sản phẩm
         </p>
-        <div className='flex mt-4'>
-          <div className='basis-1/2  mr-8'>
-            <div className='flex'>
-              <div className='w-1/4 flex flex-col items-center justify-evenly mr-4'>
+        <div className='flex flex-col lg:flex-row mt-4'>
+          <div className='lg:w-1/2  lg:mr-8'>
+            <div className='flex flex-col md:flex-row '>
+              <div className='md:w-1/4 flex flex-col items-center justify-evenly mr-4'>
                 <p>
                   <span className='text-4xl font-medium'>{book.ratingsAverage}</span>/5
                 </p>
                 <Rate allowHalf value={book.ratingsAverage} disabled className='text-sm' />
                 <p className='text-gray-500 text-sm'>({book.totalRating || 0} đánh giá)</p>
               </div>
-              <div className='flex-1'>
+              <div className='md:flex-1'>
                 <div className='flex'>
                   <span className='w-12 mr-2'>5 sao</span>
                   <Progress percent={50} strokeColor='red' />

@@ -19,7 +19,6 @@ export const CardBook = ({ book }) => {
             <div className='flex justify-between items-center'>
               <div>
                 <Rate allowHalf defaultValue={book.ratingsAverage} disabled className='text-sm' />
-                <span className='text-gray-400 ml-2'>({book.ratingsAverage})</span>
               </div>
             </div>
             <p className='text-gray-400 text-xs'>
