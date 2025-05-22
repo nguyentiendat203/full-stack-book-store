@@ -98,7 +98,7 @@ function Profile() {
         <div className='mr-2 md:mr-4'>
           <button className='flex flex-col items-center text-white lg:text-gray-500'>
             <FontAwesomeIcon className='size-6 md:size-5' icon={faUser} />
-            <span className='hidden md:inline-block text-sm'>Tài khoản</span>
+            <span className='hidden md:inline-block text-xs'>Tài khoản</span>
           </button>
         </div>
       </Dropdown>

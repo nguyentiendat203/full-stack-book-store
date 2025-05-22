@@ -8,23 +8,32 @@ import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import userAPI from '~/api/userAPI'
 import useAuthStore from '~/store/useAuthStore'
+import { faTrello } from '@fortawesome/free-brands-svg-icons'
+import usePermission from '~/hooks/usePermission'
 
 function SideMenu() {
   const navigate = useNavigate()
   const { currentUser } = useAuthStore()
+  const { hasPermission } = usePermission()
 
   const [listOrderByStatus, setListOrderByStatus] = useState({})
 
   const listItems = [
-    { status: '0', key: '/', icon: faHome, label: 'Home' },
-    { status: '1', key: 'dash-board/book', icon: faBook, label: 'Book' },
-    { status: '2', key: 'dash-board/user', icon: faUser, label: 'User' },
-    { status: '3', key: 'dash-board/order', icon: faRectangleList, label: 'Order' },
-    { status: '4', key: 'dash-board/role', icon: faUserSecret, label: 'Role' },
-    { status: '5', key: 'dash-board/permission', icon: faCodeCompare, label: 'Permission' }
+    { status: '0', key: '/', icon: faHome, label: 'Home', permissions: '' },
+    { status: '6', key: '/dash-board', icon: faTrello, label: 'Dashboard', permissions: '' },
+    { status: '1', key: '/dash-board/book', icon: faBook, label: 'Book', permissions: 'view:books' },
+    { status: '2', key: '/dash-board/user', icon: faUser, label: 'User', permissions: 'view:users' },
+    { status: '3', key: '/dash-board/order', icon: faRectangleList, label: 'Order', permissions: 'view:orders' },
+    { status: '4', key: '/dash-board/role', icon: faUserSecret, label: 'Role', permissions: 'view:roles' },
+    { status: '5', key: '/dash-board/permission', icon: faCodeCompare, label: 'Permission', permissions: 'view:roles' }
   ]
 
   const items = listItems.map((item) => {
+    const acceptedPermision = hasPermission(item.permissions)
+    if (!acceptedPermision) {
+      return null
+    }
+
     const hasOrdersInStatus =
       (item.status == 3 && listOrderByStatus[1]?.length > 0) || (item.status == 3 && listOrderByStatus[2]?.length > 0) || (item.status == 3 && listOrderByStatus[3]?.length > 0)
     return {
@@ -69,7 +78,7 @@ function SideMenu() {
       </p>
       <Menu
         items={items}
-        defaultSelectedKeys='dash-board/book'
+        defaultSelectedKeys='dash-board'
         onClick={(item) => {
           navigate(item.key)
         }}

@@ -7,7 +7,7 @@ const orderAPI = {
     return axiosClient.post(url, reqBody)
   },
   getAllOrders: () => {
-    const url = '/order/orders'
+    const url = '/order/read'
     return axiosClient.get(url)
   },
   updateStatusOrder: (reqBody) => {

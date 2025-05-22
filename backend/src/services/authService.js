@@ -42,7 +42,16 @@ const login = async (reqBody, res) => {
     }
 
     const user = await db.User.findOne({
-      where: { email }
+      where: { email },
+      include: {
+        model: db.Group,
+        attributes: ['id', 'name'],
+        include: {
+          model: db.Role,
+          attributes: ['id', 'url', 'description'],
+          through: { attributes: [] }
+        }
+      }
     })
     if (!user) {
       throw new ApiError(StatusCodes.NOT_FOUND, 'Email không tồn tại!')

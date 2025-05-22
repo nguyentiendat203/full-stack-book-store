@@ -9,6 +9,7 @@ import BookDetail from './components/BookDetail/BookDetail'
 import Checkout from './pages/Cart/Checkout/Checkout'
 import ListUser from './pages/Admin/User/ListUser/ListUser'
 import NotFound from './pages/NotFound'
+import { NotFound as AdminNotFound } from './pages/Admin/NotFound'
 import GroupRole from './pages/Admin/GroupRole/GroupRole'
 import Book from './pages/Admin/Book'
 import Role from './pages/Admin/GroupRole/Role'
@@ -20,6 +21,7 @@ import FilterPage from '~/pages/Filter'
 import { useEffect } from 'react'
 import PrivateLayout from '~/layout/PrivateLayout'
 import useAuthStore from '~/store/useAuthStore'
+import { HomeAdminDashboard } from '~/pages/Admin'
 
 export function ScrollToTop({ children }) {
   const { pathname } = useLocation()
@@ -83,27 +85,62 @@ function App() {
     },
     {
       path: '/',
-      element: <AdminLayout />,
       children: [
         {
+          path: 'dash-board',
+          element: (
+            <AdminLayout permission='view:books'>
+              <HomeAdminDashboard />
+            </AdminLayout>
+          )
+        },
+        {
           path: 'dash-board/book',
-          element: <Book />
+          element: (
+            <AdminLayout permission='view:books'>
+              <Book />
+            </AdminLayout>
+          )
         },
         {
           path: 'dash-board/user',
-          element: <ListUser />
+          element: (
+            <AdminLayout permission='view:users'>
+              <ListUser />
+            </AdminLayout>
+          )
         },
         {
           path: 'dash-board/order',
-          element: <AdminOrder />
+          element: (
+            <AdminLayout permission='view:orders'>
+              <AdminOrder />
+            </AdminLayout>
+          )
         },
         {
           path: 'dash-board/role',
-          element: <Role />
+          element: (
+            <AdminLayout permission='view:roles'>
+              <Role />
+            </AdminLayout>
+          )
         },
         {
           path: 'dash-board/permission',
-          element: <GroupRole />
+          element: (
+            <AdminLayout permission='view:roles'>
+              <GroupRole />
+            </AdminLayout>
+          )
+        },
+        {
+          path: 'dash-board/not-found',
+          element: (
+            <AdminLayout permission=''>
+              <AdminNotFound />
+            </AdminLayout>
+          )
         }
       ]
     }

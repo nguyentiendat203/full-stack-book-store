@@ -172,7 +172,7 @@ function Header() {
                 <NavLink to='/dash-board/book'>
                   <div className='hidden text-gray-500 text-sm lg:flex flex-col  items-center'>
                     <SettingOutlined className='text-lg' />
-                    <span>Admin</span>
+                    <span className='text-xs'>Dashboard</span>
                   </div>
                 </NavLink>
               )}
