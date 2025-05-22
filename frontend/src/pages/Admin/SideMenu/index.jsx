@@ -5,11 +5,10 @@ import { faBook, faBug, faCodeCompare, faHome, faUserSecret } from '@fortawesome
 import { faUser } from '@fortawesome/free-regular-svg-icons'
 import { faRectangleList } from '@fortawesome/free-regular-svg-icons'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
-import userAPI from '~/api/userAPI'
 import useAuthStore from '~/store/useAuthStore'
 import { faTrello } from '@fortawesome/free-brands-svg-icons'
 import usePermission from '~/hooks/usePermission'
+import orderAPI from '~/api/orderAPI'
 
 function SideMenu() {
   const navigate = useNavigate()
@@ -57,17 +56,10 @@ function SideMenu() {
     return statusMap
   }
 
-  const fetchDataListOrder = async () => {
-    try {
-      const res = await userAPI.getAllOrders()
-      setListOrderByStatus(categorizeOrders(res))
-    } catch (error) {
-      toast(error.response?.data?.message)
-    }
-  }
-
   useEffect(() => {
-    fetchDataListOrder()
+    orderAPI.getAllOrders().then((res) => {
+      setListOrderByStatus(categorizeOrders(res))
+    })
   }, [currentUser])
 
   return (
@@ -78,7 +70,7 @@ function SideMenu() {
       </p>
       <Menu
         items={items}
-        defaultSelectedKeys='dash-board'
+        defaultSelectedKeys='/dash-board'
         onClick={(item) => {
           navigate(item.key)
         }}

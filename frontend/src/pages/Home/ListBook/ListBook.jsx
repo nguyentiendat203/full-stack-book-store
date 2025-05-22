@@ -1,5 +1,5 @@
 import { Button, Pagination } from 'antd'
-import { CardBook } from '~/components/CardBook'
+import { CardBook } from '~/components/Cards/CardBook'
 
 function ListBook({ listBooks, setCurrentPage, totalRecords, currentLimit, noPaginate, title, iconTitle, setCurrentLimit }) {
   const handleChangePage = (e) => {

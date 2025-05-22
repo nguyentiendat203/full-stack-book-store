@@ -169,7 +169,7 @@ function Header() {
               <Cart />
               <Profile />
               {currentUser && currentUser.groupId !== 1 && (
-                <NavLink to='/dash-board/book'>
+                <NavLink to='/dash-board'>
                   <div className='hidden text-gray-500 text-sm lg:flex flex-col  items-center'>
                     <SettingOutlined className='text-lg' />
                     <span className='text-xs'>Dashboard</span>
