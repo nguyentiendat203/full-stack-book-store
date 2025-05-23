@@ -1,45 +1,28 @@
 import { useEffect, useState } from 'react'
-import { toast } from 'react-toastify'
 import orderAPI from '~/api/orderAPI'
 import { Badge, ConfigProvider, Tabs } from 'antd'
 import ListOrder from './ListOrder/ListOrder'
-import useAuthStore from '~/store/useAuthStore'
+import useOrderStore from '~/store/useOrderStore'
 
 function Order() {
-  const { currentUser } = useAuthStore()
-  const [listOrderByStatus, setListOrderByStatus] = useState({})
+  const [tab, setTab] = useState(0)
+  const [mapOrderByStatus, setMapOrderByStatus] = useState({})
+  const { allOrdersOfUser, setAllOrdersOfUser } = useOrderStore()
 
   const listItems = [
-    { key: '0', label: 'Tất cả' },
-    { key: '1', label: 'Chờ xác nhận' },
-    { key: '2', label: 'Chờ lấy hàng' },
-    { key: '3', label: 'Chờ giao hàng' },
-    { key: '4', label: 'Hoàn thành' },
-    { key: '5', label: 'Đã hủy' }
+    { key: 0, label: 'Tất cả' },
+    { key: 1, label: 'Chờ xác nhận' },
+    { key: 2, label: 'Chờ lấy hàng' },
+    { key: 3, label: 'Chờ giao hàng' },
+    { key: 4, label: 'Hoàn thành' },
+    { key: 5, label: 'Đã hủy' }
   ]
-
-  const categorizeOrders = (orders) => {
-    const statusMap = {}
-    listItems.forEach((item) => {
-      statusMap[item.key] = orders.filter((order) => order.status === parseInt(item.key))
-    })
-    return statusMap
-  }
-
-  const fetchDataListOrder = async () => {
-    try {
-      const res = await orderAPI.getMyOrder(currentUser.id)
-      setListOrderByStatus(categorizeOrders(res))
-    } catch (error) {
-      toast(error.response?.data?.message)
-    }
-  }
 
   let items = listItems.map((item) => {
     const hasOrdersInStatus =
-      (item.key == 1 && listOrderByStatus[item.key]?.length > 0) ||
-      (item.key == 2 && listOrderByStatus[item.key]?.length > 0) ||
-      (item.key == 3 && listOrderByStatus[item.key]?.length > 0)
+      (item.key == 1 && mapOrderByStatus[item.key]?.length > 0) ||
+      (item.key == 2 && mapOrderByStatus[item.key]?.length > 0) ||
+      (item.key == 3 && mapOrderByStatus[item.key]?.length > 0)
     return {
       key: item.key,
       label: hasOrdersInStatus ? (
@@ -49,26 +32,41 @@ function Order() {
       ) : (
         <span className='text-sm'>{item.label}</span>
       ),
-      children: <ListOrder fetchDataListOrder={fetchDataListOrder} listOrder={item.key === '0' ? listOrderByStatus[4] : listOrderByStatus[item.key]} statusMessage={item.label} />
+      children: <ListOrder listOrder={allOrdersOfUser} statusMessage={item.label} />
     }
   })
 
   const onChange = async (key) => {
-    try {
-      const res = await orderAPI.getMyOrderByStatus(key)
-      setListOrderByStatus((prev) => ({ ...prev, [key]: res }))
-    } catch (error) {
-      toast(error.response?.data?.message)
+    if (key == 0) {
+      fetchOrders()
+      return
     }
+    setAllOrdersOfUser(mapOrderByStatus[key])
+    setTab(key)
+  }
+
+  const mapOrdersToStatus = (orders) => {
+    const statusMap = {}
+    listItems.forEach((item) => {
+      statusMap[item.key] = orders.filter((order) => order.status === item.key)
+    })
+    return statusMap
+  }
+  const fetchOrders = async () => {
+    orderAPI.getMyOrder().then((res) => {
+      setMapOrderByStatus(mapOrdersToStatus(res))
+      const newOreders = res.filter((order) => order.status == 4 || order.status == 5)
+      setAllOrdersOfUser(newOreders)
+    })
   }
 
   useEffect(() => {
-    fetchDataListOrder()
-  }, [currentUser])
+    fetchOrders()
+  }, [])
 
   return (
     <ConfigProvider theme={{ components: { Tabs: { colorPrimary: '#d22826', algorithm: true } } }}>
-      <Tabs defaultActiveKey='0' items={items} onChange={onChange} />
+      <Tabs defaultActiveKey={tab} items={items} onChange={onChange} />
     </ConfigProvider>
   )
 }

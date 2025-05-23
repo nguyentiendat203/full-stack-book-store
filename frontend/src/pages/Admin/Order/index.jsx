@@ -4,10 +4,14 @@ import { toast } from 'react-toastify'
 import { format } from 'date-fns'
 
 import { formatPriceVND } from '~/utils/formatPriceVND'
-import ListOrder from '~/pages/User/Order/ListOrder/ListOrder'
 import orderAPI from '~/api/orderAPI'
+import usePermission from '~/hooks/usePermission'
+import OrderItem from '~/pages/User/Order/ListOrder/OrderItem/OrderItem'
+import { HeaderListOrder } from '~/pages/User/Order/ListOrder/HeaderListOrder/HeaderListOrder'
 
 function Order() {
+  const { hasPermission } = usePermission()
+  const canUpdateStatusOrder = hasPermission('update:order')
   const items = [
     {
       key: '1',
@@ -130,17 +134,19 @@ function Order() {
             <Button type='primary' onClick={() => displayDetailOrder(data)} className='mr-2 !bg-cyan-500'>
               Xem chi tiết
             </Button>
-            <Dropdown
-              menu={{
-                items
-              }}
-              placement='bottomRight'
-              trigger={['click']}
-            >
-              <Button disabled={(data.status == 4 && 'true') || (data.status == 5 && 'true')} onClick={() => setMyOrderId(data.id)}>
-                Cập nhật trạng thái
-              </Button>
-            </Dropdown>
+            {canUpdateStatusOrder && (
+              <Dropdown
+                menu={{
+                  items
+                }}
+                placement='bottomRight'
+                trigger={['click']}
+              >
+                <Button disabled={(data.status == 4 && 'true') || (data.status == 5 && 'true')} onClick={() => setMyOrderId(data.id)}>
+                  Cập nhật trạng thái
+                </Button>
+              </Dropdown>
+            )}
           </>
         )
       }
@@ -148,7 +154,7 @@ function Order() {
   ]
 
   const [dataSource, setDataSource] = useState([])
-  const [listDetailOrder, setListDetailOrder] = useState([])
+  const [order, setOrder] = useState({})
   const [myOrderId, setMyOrderId] = useState('')
 
   const updateStatusOrder = async (status, orderId) => {
@@ -161,9 +167,7 @@ function Order() {
   }
 
   const displayDetailOrder = (data) => {
-    const listOrder = []
-    listOrder.push(data)
-    setListDetailOrder(listOrder)
+    setOrder(data)
     setIsModalOpen(true)
   }
 
@@ -191,9 +195,8 @@ function Order() {
     <>
       <Table columns={columns} dataSource={dataSource} />
       <Modal title='Chi tiết đơn hàng' width='50%' open={isModalOpen} onCancel={handleCancel} onOk={handleOK}>
-        <div>
-          <ListOrder listOrder={listDetailOrder} statusMessage='' onHideBtnConfirmOrder />
-        </div>
+        <HeaderListOrder order={order} statusMessage='' />
+        <OrderItem order={order} />
       </Modal>
     </>
   )

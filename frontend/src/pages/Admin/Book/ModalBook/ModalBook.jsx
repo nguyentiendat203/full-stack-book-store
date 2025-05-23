@@ -98,20 +98,16 @@ function ModalBook({ isModalBook, setIsModalBook, fetchAllBook, action, dataModa
   }
 
   const handleOk = async () => {
-    try {
-      if (checkValidInput()) {
-        const res = action === 'CREATE' ? await bookAPI.createBook(dataBook) : await bookAPI.updateBook({ ...dataBook })
-        if (res) {
-          setDataBook(dataBookDefault)
-          setIsModalBook(false)
-          fetchAllBook()
-          toast.success(res.message)
-          setImageUrl()
-          setValidInput(validInputDefault)
-        }
+    if (checkValidInput()) {
+      const res = action === 'CREATE' ? await bookAPI.createBook(dataBook) : await bookAPI.updateBook({ ...dataBook })
+      if (res) {
+        setDataBook(dataBookDefault)
+        setIsModalBook(false)
+        fetchAllBook()
+        toast.success(res.message)
+        setImageUrl()
+        setValidInput(validInputDefault)
       }
-    } catch (error) {
-      toast.error(error.response.data.message)
     }
   }
 

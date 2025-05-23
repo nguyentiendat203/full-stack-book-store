@@ -6,8 +6,12 @@ import userAPI from '~/api/userAPI'
 import ModalDeleteUser from './ModalDeleteUser/ModalDeleteUser'
 import ModalUser from './ModalUser/ModalUser'
 import { toast } from 'react-toastify'
+import usePermission from '~/hooks/usePermission'
 
 function ListUser() {
+  const { hasPermission } = usePermission()
+  const canDeleteUser = hasPermission('delete:user')
+  const canUpdateUser = hasPermission('update:user')
   const columns = [
     {
       title: 'Id',
@@ -34,8 +38,8 @@ function ListUser() {
       render: (data) => {
         return (
           <>
-            <FontAwesomeIcon icon={faPenToSquare} className='mr-4 text-lg text-yellow-400 cursor-pointer' onClick={() => handleEditUser(data)} />
-            <FontAwesomeIcon icon={faTrash} className='text-lg text-red-500 cursor-pointer' onClick={() => handleDeleteUser(data)} />
+            {canUpdateUser && <FontAwesomeIcon icon={faPenToSquare} className='mr-4 text-lg text-yellow-400 cursor-pointer' onClick={() => handleEditUser(data)} />}
+            {canDeleteUser && <FontAwesomeIcon icon={faTrash} className='text-lg text-red-500 cursor-pointer' onClick={() => handleDeleteUser(data)} />}
           </>
         )
       }

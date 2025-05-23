@@ -7,8 +7,13 @@ import bookAPI from '~/api/bookAPI'
 import { formatPriceVND } from '~/utils/formatPriceVND'
 import ModalDeleteBook from './ModalDeleteBook/ModalDeleteBook'
 import ModalBook from './ModalBook/ModalBook'
+import usePermission from '~/hooks/usePermission'
 
 function Book() {
+  const { hasPermission } = usePermission()
+  const canDeleteBook = hasPermission('delete:book')
+  const canUpdateBook = hasPermission('update:book')
+
   const columns = [
     {
       title: 'Id',
@@ -69,8 +74,8 @@ function Book() {
       render: (data) => {
         return (
           <div className='flex'>
-            <FontAwesomeIcon icon={faPenToSquare} className='mr-4 text-lg text-yellow-400 cursor-pointer' onClick={() => hanldeUpdateBook(data)} />
-            <FontAwesomeIcon icon={faTrash} className='text-lg text-red-500 cursor-pointer' onClick={() => handleDeleteBook(data)} />
+            {canUpdateBook && <FontAwesomeIcon icon={faPenToSquare} className='mr-4 text-lg text-yellow-400 cursor-pointer' onClick={() => hanldeUpdateBook(data)} />}
+            {canDeleteBook && <FontAwesomeIcon icon={faTrash} className='text-lg text-red-500 cursor-pointer' onClick={() => handleDeleteBook(data)} />}
           </div>
         )
       }
@@ -78,6 +83,9 @@ function Book() {
   ]
 
   const [dataSource, setDataSource] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalRecords, setTotalRecords] = useState(0)
+  const [itemPerPage, setItemPerPage] = useState(10)
   //------- Modal Delete Book
   const [dataBookDelete, setDataBookDelete] = useState({})
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -97,14 +105,10 @@ function Book() {
   }
 
   const handleOk = async () => {
-    try {
-      await bookAPI.deleteBook(dataBookDelete.id)
-      setIsModalOpen(false)
-      fetchAllBook()
-      toast.success('Successfully deleted book')
-    } catch (error) {
-      toast.error(error.response.data.message)
-    }
+    await bookAPI.deleteBook(dataBookDelete.id)
+    setIsModalOpen(false)
+    fetchAllBook()
+    toast.success('Successfully deleted book')
   }
 
   const hanldeUpdateBook = async (data) => {
@@ -113,18 +117,23 @@ function Book() {
     setIsModalBook(true)
   }
 
-  const fetchAllBook = async () => {
+  const fetchAllBook = async (currentLimit, itemPerPage) => {
     try {
-      const res = await bookAPI.getAllBook()
+      const res = await bookAPI.getAllBook(currentLimit, itemPerPage)
       setDataSource(res.books)
+      setTotalRecords(res.totalRows)
     } catch (err) {
       toast.error(err.response.data.message)
     }
   }
 
   useEffect(() => {
-    fetchAllBook()
+    fetchAllBook(currentPage, itemPerPage)
   }, [])
+
+  useEffect(() => {
+    fetchAllBook(currentPage, itemPerPage)
+  }, [currentPage, itemPerPage])
 
   return (
     <>
@@ -142,7 +151,17 @@ function Book() {
         columns={columns}
         dataSource={dataSource}
         pagination={{
-          pageSize: 10
+          pageSize: itemPerPage,
+          current: currentPage,
+          showSizeChanger: true,
+          total: totalRecords,
+          onChange: (page, pageSize) => {
+            setCurrentPage(page)
+            setItemPerPage(pageSize)
+          },
+          showTotal: (total) => {
+            return <span className='text-sm'>Total {total} books</span>
+          }
         }}
       />
       <ModalDeleteBook isModalOpen={isModalOpen} dataBookDelete={dataBookDelete} handleCancel={handleCancel} handleOk={handleOk} />
