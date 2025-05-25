@@ -5,10 +5,10 @@ Create a website that helps users easily search and buy their favorite books. Ge
 ## Features
 
 - Perform CRUD operations on Book, User, Order, Role.
-- Implement pagination, search and user cart management functions
+- Implement pagination, search, filter and user cart management functions
 - Configuring CORS in back-end express middleware.
 - Implement JWT Authentication, Authorization.
-- Permissions, assign the users to groups (roles)
+- Role-Based Access Control (RBAC).
 
 ## Tech
 
